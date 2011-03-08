@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javamud.item.Item;
 import javamud.player.Player;
+import javamud.room.SimpleExit.Direction;
 
 public interface Room {
 	public String getTitle();
@@ -25,5 +26,6 @@ public interface Room {
 	 */
 	public Set<Exit> getExits();
 	public void addExit(Exit e);
+	public Exit getExit(Direction dir);
 	
 }
