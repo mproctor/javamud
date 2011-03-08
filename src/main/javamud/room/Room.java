@@ -24,4 +24,6 @@ public interface Room {
 	 * @return the exits from this room
 	 */
 	public Set<Exit> getExits();
+	public void addExit(Exit e);
+	
 }
