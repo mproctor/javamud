@@ -2,16 +2,21 @@ package javamud.room;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class LinkRoomTest {
+	SimpleRoom r1,r2;
+	
+	@Before
+	public void createRooms() {
+		r1 = new SimpleRoom(1);
+		r2 = new SimpleRoom(2);
+	}
 	
 	@Test
 	public void roomNorthSouth() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.North, null, null);
 		
 		assertEquals(r2,r1.getDestination(SimpleExit.Direction.North));
@@ -19,9 +24,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void roomSouthNorth() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.South, null, null);
 		
 		assertEquals(r2,r1.getDestination(SimpleExit.Direction.South));
@@ -29,9 +31,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void roomEastWest() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.East, null, null);
 		
 		assertEquals(r2,r1.getDestination(SimpleExit.Direction.East));
@@ -39,9 +38,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void roomWestEast() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.West, null, null);
 		
 		assertEquals(r2,r1.getDestination(SimpleExit.Direction.West));
@@ -49,9 +45,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void roomUpDown() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.Up, null, null);
 		
 		assertEquals(r2,r1.getDestination(SimpleExit.Direction.Up));
@@ -59,9 +52,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void roomDownUp() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.Down, null, null);
 		
 		assertEquals(r2,r1.getDestination(SimpleExit.Direction.Down));
@@ -69,9 +59,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void defaultOpenBothSides() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.North, null, null);
 		
 		assertEquals(r1.getExit(SimpleExit.Direction.North).isOpen(), true);
@@ -79,9 +66,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void openBothSides() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.North, SimpleExit.ExitStatus.Open, null);
 		
 		assertEquals(r1.getExit(SimpleExit.Direction.North).isOpen(), true);
@@ -89,9 +73,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void closedBothSides() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.North, SimpleExit.ExitStatus.Closed, null);
 		
 		assertEquals(r1.getExit(SimpleExit.Direction.North).isClosed(), true);
@@ -99,9 +80,6 @@ public class LinkRoomTest {
 	}
 	@Test
 	public void lockedBothSides() {
-		SimpleRoom r1 = new SimpleRoom();
-		SimpleRoom r2 = new SimpleRoom();
-		
 		RoomLinker.makeSymmetricLink(r1, r2, SimpleExit.Direction.North, SimpleExit.ExitStatus.Locked, null);
 		
 		assertEquals(r1.getExit(SimpleExit.Direction.North).isLocked(), true);

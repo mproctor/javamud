@@ -1,5 +1,6 @@
 package javamud.room;
 
+import java.util.LinkedList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,29 +12,32 @@ import javamud.room.SimpleExit.Direction;
 public class SimpleRoom implements Room {
 	
 	private Set<Exit> exits = new HashSet<Exit>();
+	private LinkedList<Player> players = new LinkedList<Player>();
+	private int roomId = -1;
+	private String title,description;
+	
+	public SimpleRoom(int i) {
+		this.roomId = i; 
+	}
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
+		return title;
 	}
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return description;
 	}
 
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return roomId;
 	}
 
 	@Override
 	public List<Player> getPlayers() {
-		// TODO Auto-generated method stub
-		return null;
+		return players;
 	}
 
 	@Override
@@ -44,8 +48,7 @@ public class SimpleRoom implements Room {
 
 	@Override
 	public Set<Exit> getExits() {
-		// TODO Auto-generated method stub
-		return null;
+		return exits;
 	}
 
 	public void addExit(Exit e) {
@@ -68,5 +71,44 @@ public class SimpleRoom implements Room {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void addPlayer(Player p) {
+		synchronized(players) {
+			if (!players.contains(p)) {
+				players.add(p);
+			}
+		}
+	}
+
+	@Override
+	public Player removePlayer(Player p) {
+		boolean wasThere = false;
+		synchronized(players) {
+			wasThere = players.remove(p);
+		}
+		
+		return (wasThere?p:null);
+	}
+
+	@Override
+	public Player getFirstPlayer() {
+		return players.peekFirst();
+	}
+
+	@Override
+	public Player getLastPlayer() {
+		return players.peekLast();
+	}
+
+	@Override
+	public int getPositionInRoom(Player p) {
+		return players.indexOf(p);
+	}
+	
+	@Override
+	public int numberPlayers() {
+		return players.size();
 	}
 }

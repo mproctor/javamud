@@ -18,6 +18,36 @@ public interface Room {
 	 * @return the players in this room
 	 */
 	public List<Player> getPlayers();
+	public void addPlayer(Player p);
+	
+	/**
+	 * returns the same player or null if not present
+	 * @param player to remove
+	 * @return the player removed or null if player was not in room
+	 */
+	public Player removePlayer(Player p);
+	
+	/**
+	 * does not remove player from room
+	 * @return the player who has been in room longest
+	 */
+	public Player getFirstPlayer();
+	
+	/**
+	 * does not remove player from room
+	 * @return the player who has been in room the shortest
+	 */
+	public Player getLastPlayer();
+	
+	/**
+	 * TODO: does this need to be in the interface?
+	 * returns the position in the room (0 is first, -1 if not present)
+	 * @param player to find in room
+	 * @return the position in the room from 0, or -1 if player not in room
+	 */
+	public int getPositionInRoom(Player p);
+	
+	public int numberPlayers();
 	public List<Item> getItems();
 	
 	/**
