@@ -24,6 +24,8 @@ public class MudStateMachine {
 	private static final Logger logger = Logger
 			.getLogger(MudStateMachine.class);
 	private PlayerMappingService playerMappingService;
+	
+	private ByteBuffer buffer = ByteBuffer.allocate(512);
 
 	public void setPlayerMappingService(
 			PlayerMappingService playerMappingService) {
@@ -68,26 +70,34 @@ public class MudStateMachine {
 
 	@SuppressWarnings("unchecked")
 	public void processMessage(SelectionKey k) {
-		Map<String, Object> attribs = (Map<String, Object>) k.attachment();
-		CharsetDecoder d = (CharsetDecoder) attribs.get("decoder");
-		SocketChannel client = (SocketChannel) k.channel();
-
+		Map<String,Object> attribs = (Map<String,Object>)k.attachment();
+		CharsetDecoder d = (CharsetDecoder)attribs.get("decoder");
+		SocketChannel client = (SocketChannel)k.channel();
+		int bytesread = -1;
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(client
-					.socket().getInputStream(), d));
-
-			String request = br.readLine();
-			ClientState state = (ClientState) attribs.get(STATE_ATTRIB);
-			String response = state.runState(request, attribs);
-
-			if (response != null) {
-				sendStringToSelectionKey(response, k);
-			}
-		} catch (IOException ie) {
-			logger.error("Problem reading from the client: " + ie.getMessage(),
-					ie);
-			close(k);
+			bytesread = client.read(buffer);
+		} catch (IOException e1) {
+			logger.warn("Problem reading from client connection: "+e1.getMessage(),e1);
 		}
+        if (bytesread == -1) {
+          close(k);
+          logger.warn("Client was readable but no bytes were read - closed client");
+        }
+        else {
+	        buffer.flip();
+	        try {
+				String request = d.decode(buffer).toString();
+				ClientState state = (ClientState)attribs.get(STATE_ATTRIB);
+				String response = state.runState(request, attribs);
+				
+				if (response != null) {
+					sendStringToSelectionKey(response, k);
+				}
+			} catch (CharacterCodingException e) {
+				logger.warn("Problem processing incoming message: "+e.getMessage(),e);
+			}
+	        buffer.clear();
+        }
 	}
 
 	@SuppressWarnings("unchecked")
