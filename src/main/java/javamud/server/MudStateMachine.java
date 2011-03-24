@@ -1,10 +1,6 @@
 package javamud.server;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringBufferInputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.SelectionKey;
@@ -20,6 +16,7 @@ import org.apache.log4j.Logger;
 
 public class MudStateMachine {
 	private static final String STATE_ATTRIB = "state";
+	private static final String STRING_BUFFER = "stringBuffer";
 	private LoginService loginService;
 	private static final Logger logger = Logger
 			.getLogger(MudStateMachine.class);
@@ -42,7 +39,8 @@ public class MudStateMachine {
 		CharsetEncoder enc = (CharsetEncoder) attribs.get("encoder");
 		try {
 			((SocketChannel) k.channel()).write(enc.encode(CharBuffer
-					.wrap("Welcome to JavaMud\nPlease enter your name: ")));
+					.wrap("Welcome to JavaMud\r\nPlease enter your name: ")));
+			attribs.put(STRING_BUFFER, new StringBuffer());
 			attribs.put(STATE_ATTRIB, new InitState());
 		} catch (CharacterCodingException e) {
 			attribs.put(STATE_ATTRIB, new FailState());
@@ -73,6 +71,7 @@ public class MudStateMachine {
 		Map<String,Object> attribs = (Map<String,Object>)k.attachment();
 		CharsetDecoder d = (CharsetDecoder)attribs.get("decoder");
 		SocketChannel client = (SocketChannel)k.channel();
+		StringBuffer sb = (StringBuffer)attribs.get(STRING_BUFFER);
 		int bytesread = -1;
 		try {
 			bytesread = client.read(buffer);
@@ -86,13 +85,19 @@ public class MudStateMachine {
         else {
 	        buffer.flip();
 	        try {
-				String request = d.decode(buffer).toString();
-				ClientState state = (ClientState)attribs.get(STATE_ATTRIB);
-				String response = state.runState(request, attribs);
-				
-				if (response != null) {
-					sendStringToSelectionKey(response, k);
-				}
+	        	sb.append(d.decode(buffer));
+				//String request = d.decode(buffer).toString();
+	        	
+	        	if (sb.charAt(sb.length()-1) == '\n') {
+	        		
+					ClientState state = (ClientState)attribs.get(STATE_ATTRIB);
+					String response = state.runState(sb.toString(), attribs);
+					
+					sb.setLength(0);	// clear the buffer
+					if (response != null) {
+						sendStringToSelectionKey(response, k);
+					}
+	        	}
 			} catch (CharacterCodingException e) {
 				logger.warn("Problem processing incoming message: "+e.getMessage(),e);
 			}
@@ -100,19 +105,19 @@ public class MudStateMachine {
         }
 	}
 
-	@SuppressWarnings("unchecked")
 	public void sendStringToPlayer(String s, Player p) {
 		SelectionKey k = playerMappingService.lookup(p);
 		sendStringToSelectionKey(s, k);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void sendStringToSelectionKey(String s, SelectionKey k) {
 		if (k.isValid()) {
 			Map<String, Object> attribs = (Map<String, Object>) k.attachment();
 			CharsetEncoder enc = (CharsetEncoder) attribs.get("encoder");
 			SocketChannel c = (SocketChannel) k.channel();
 			try {
-				c.write(enc.encode(CharBuffer.wrap(new char[] { '\r' })));
+				c.write(enc.encode(CharBuffer.wrap(new char[] { '\r','\n' })));
 				c.write(enc.encode(CharBuffer.wrap(s)));
 			} catch (CharacterCodingException e) {
 				// TODO Auto-generated catch block
@@ -266,7 +271,7 @@ public class MudStateMachine {
 				attribs.remove("newPlayerPword");
 
 				attribs.put(STATE_ATTRIB, new PlayerCreatePwordState());
-				return "Passwords didn't match, try again.\nEnter new password: ";
+				return "Passwords didn't match, try again.\r\nEnter new password: ";
 			}
 		}
 	}

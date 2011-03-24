@@ -45,7 +45,10 @@ public class DefaultFileLoginService implements LoginService {
 
 	@Override
 	public void addUser(String name, String pword) {
-		loginDetails.put(name, pword);		
+		logger.info("adding new user "+name);
+		loginDetails.put(name, pword);	
+		
+		// flush new user to file
 	}
 
 }
