@@ -35,12 +35,12 @@ public class DefaultFileLoginService implements LoginService {
 
 	@Override
 	public boolean verifyPassword(String pName, String s) {
-		return true;
+		return loginDetails.get(pName).equals(s);
 	}
 
 	@Override
 	public boolean playerExists(String s) {
-		return false;
+		return loginDetails.containsKey(s);
 	}
 
 	@Override
