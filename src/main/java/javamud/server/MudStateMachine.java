@@ -42,6 +42,7 @@ public class MudStateMachine {
 					.wrap("Welcome to JavaMud\r\nPlease enter your name: ")));
 			attribs.put(STRING_BUFFER, new StringBuffer());
 			attribs.put(STATE_ATTRIB, new InitState());
+
 		} catch (CharacterCodingException e) {
 			attribs.put(STATE_ATTRIB, new FailState());
 			logger.warn("Problems writing to client - moving to fail state:"
@@ -72,6 +73,8 @@ public class MudStateMachine {
 		CharsetDecoder d = (CharsetDecoder)attribs.get("decoder");
 		SocketChannel client = (SocketChannel)k.channel();
 		StringBuffer sb = (StringBuffer)attribs.get(STRING_BUFFER);
+		ClientState state = (ClientState)attribs.get(STATE_ATTRIB);
+
 		int bytesread = -1;
 		try {
 			bytesread = client.read(buffer);
@@ -90,7 +93,6 @@ public class MudStateMachine {
 	        	
 	        	if (sb.charAt(sb.length()-1) == '\n') {
 	        		
-					ClientState state = (ClientState)attribs.get(STATE_ATTRIB);
 					String response = state.runState(sb.toString(), attribs);
 					
 					sb.setLength(0);	// clear the buffer

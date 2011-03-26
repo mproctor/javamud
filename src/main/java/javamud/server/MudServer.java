@@ -80,7 +80,6 @@ public class MudServer implements Lifecycle,Runnable {
 					// only the server channel is acceptable
 					if (k.isAcceptable() && k==ssk) {
 						SocketChannel client = serverSocketChannel.accept();
-						
 						if (client != null) {
 							client.configureBlocking(false);
 							SelectionKey ck = client.register(selector, SelectionKey.OP_READ);
@@ -94,7 +93,7 @@ public class MudServer implements Lifecycle,Runnable {
 					else if (k.isReadable()) {
 						stateMachine.processMessage(k);
 					}
-					
+					selectableChannels.remove(k);
 					// we don't check for writeable
 				}
 			}
