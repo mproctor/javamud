@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
 
 	<bean id="server" class="javamud.server.MudServer">
 		<property name="stateMachine" ref="stateMachine"/>
@@ -21,4 +19,13 @@
 	</bean>
 	<bean id="playerMappingService" class="javamud.server.PlayerMappingService"/>
 
+	<bean id="commandParser" class="javamud.command.DefaultCommandParser" init-method="init">
+		<property name="t" ref="trie"/>
+		<property name="cmdMap">
+			<util:map map-class="java.lang.LinkedHashMap" key-type="String" value-type="javamud.command.Command">
+			</util:map>
+		</property>
+	</bean>
+
+	<bean id="trie" class="javamud.data.DefaultTrie"/>
 </beans>
