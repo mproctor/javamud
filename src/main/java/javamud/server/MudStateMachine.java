@@ -74,6 +74,12 @@ public class MudStateMachine {
 		SocketChannel client = (SocketChannel)k.channel();
 		StringBuffer sb = (StringBuffer)attribs.get(STRING_BUFFER);
 		ClientState state = (ClientState)attribs.get(STATE_ATTRIB);
+		
+		// choke if we already failed
+		if (state instanceof FailState) {
+			sendStringToSelectionKey("Login failed.", k);
+			close(k);
+		}
 
 		int bytesread = -1;
 		try {
