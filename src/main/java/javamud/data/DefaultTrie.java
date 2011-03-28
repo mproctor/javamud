@@ -2,12 +2,21 @@ package javamud.data;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javamud.command.Command;
 
 public class DefaultTrie implements Trie {
 	
 	private TrieNode root = new TrieNode('\0',null);
+	
+	public DefaultTrie(){};
+	
+	public void init(Map<String, Command> cmdMappings) {
+		for(Map.Entry<String, Command> cmdMapping: cmdMappings.entrySet()) {
+			addCommand(cmdMapping.getKey(), cmdMapping.getValue());
+		}
+	}
 
 	@Override
 	public Command getCommandAtWord(String s) {

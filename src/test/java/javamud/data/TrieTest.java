@@ -1,10 +1,13 @@
 package javamud.data;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import java.util.LinkedHashMap;
+
 import javamud.command.Command;
 import javamud.player.Player;
 
-import org.junit.*;
+import org.junit.Test;
 
 public class TrieTest {
 	
@@ -74,5 +77,27 @@ public class TrieTest {
 		assertEquals(c1, t.getCommandAtWord("nor"));
 		assertEquals(c1, t.getCommandAtWord("no"));
 		assertEquals(c1, t.getCommandAtWord("n"));	
+	}
+	
+	@Test
+	public void testInit() {
+		Trie t = new DefaultTrie();
+		LinkedHashMap<String, Command> m = new LinkedHashMap<String, Command>();
+		m.put("north",c1);
+		m.put("south", c2);
+		
+		t.init(m);
+		assertEquals(c2, t.getCommandAtWord("south"));
+		assertEquals(c2, t.getCommandAtWord("sout"));
+		assertEquals(c2, t.getCommandAtWord("sou"));
+		assertEquals(c2, t.getCommandAtWord("so"));
+		assertEquals(c2, t.getCommandAtWord("s"));
+		
+		assertEquals(c1, t.getCommandAtWord("north"));
+		assertEquals(c1, t.getCommandAtWord("nort"));
+		assertEquals(c1, t.getCommandAtWord("nor"));
+		assertEquals(c1, t.getCommandAtWord("no"));
+		assertEquals(c1, t.getCommandAtWord("n"));	
+		
 	}
 }

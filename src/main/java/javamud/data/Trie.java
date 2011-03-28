@@ -1,5 +1,7 @@
 package javamud.data;
 
+import java.util.Map;
+
 import javamud.command.Command;
 
 /**
@@ -12,5 +14,7 @@ public interface Trie {
 	Command getCommandAtWord(String s);
 	
 	void addCommand(String s,Command c);
+	
+	void init(Map<String, Command> m);
 
 }
