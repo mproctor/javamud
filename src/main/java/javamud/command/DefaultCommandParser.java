@@ -5,7 +5,7 @@ import java.util.*;
 
 public class DefaultCommandParser implements CommandParser {
 	private Trie t;
-	private Map cmdMap;
+	private Map<String,Command> cmdMap;
 	
 	public void setT(Trie t) {
 		this.t = t;
@@ -17,7 +17,7 @@ public class DefaultCommandParser implements CommandParser {
 		// TODO: clear cmdMap for garbage collection?
 	}
 
-	public void setCmdMap(Map cmdMap) {
+	public void setCmdMap(Map<String,Command> cmdMap) {
 		this.cmdMap = cmdMap;
 	}
 
