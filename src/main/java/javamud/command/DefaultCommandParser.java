@@ -22,7 +22,7 @@ public class DefaultCommandParser implements CommandParser {
 	}
 
 	@Override
-	public Command parse(String cmd) {
+	public Command parse(String cmd) throws CommandException {
 		return t.getCommandAtWord(cmd);
 	}
 

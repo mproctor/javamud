@@ -110,5 +110,5 @@ public class SimpleRoom implements Room {
 	@Override
 	public int numberPlayers() {
 		return players.size();
-	}
+	}	
 }

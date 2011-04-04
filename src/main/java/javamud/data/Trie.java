@@ -3,6 +3,7 @@ package javamud.data;
 import java.util.Map;
 
 import javamud.command.Command;
+import javamud.command.CommandException;
 
 /**
  * modified Trie structure that holds a Command at each level
@@ -11,7 +12,7 @@ import javamud.command.Command;
  *
  */
 public interface Trie {
-	Command getCommandAtWord(String s);
+	Command getCommandAtWord(String s) throws CommandException;
 	
 	void addCommand(String s,Command c);
 	

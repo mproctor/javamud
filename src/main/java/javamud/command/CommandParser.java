@@ -2,6 +2,6 @@ package javamud.command;
 
 public interface CommandParser {
 	
-	Command parse(String cmd);
+	Command parse(String cmd) throws CommandException;
 
 }

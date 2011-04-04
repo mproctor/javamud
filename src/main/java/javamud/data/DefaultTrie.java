@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javamud.command.Command;
+import javamud.command.CommandException;
 
 public class DefaultTrie implements Trie {
 	
@@ -19,7 +20,7 @@ public class DefaultTrie implements Trie {
 	}
 
 	@Override
-	public Command getCommandAtWord(String s) {
+	public Command getCommandAtWord(String s) throws CommandException {
 		char[] sArr = s.toCharArray();
 		TrieNode currNode = root;
 		
@@ -31,7 +32,7 @@ public class DefaultTrie implements Trie {
 		}
 		
 		if (i<sArr.length) {
-			return null;		// our string is not a substring of something in the trie 
+			throw new CommandException(s);		// our string is not a substring of something in the trie 
 		} else {
 			return currNode.getCmd();
 		}

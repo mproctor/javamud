@@ -2,10 +2,12 @@ package javamud.server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.CharBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
@@ -72,10 +74,16 @@ public class MudServer implements Lifecycle,Runnable {
 			while(running) {
 				selector.select();
 				
-				Set<SelectionKey> selectableChannels = selector.selectedKeys();
+				Set<SelectionKey> selectableChannels=null;
+				synchronized(selector) {
+					selectableChannels = selector.selectedKeys();
+				}
 				
 				int channelsProcessed=0;
 				for(SelectionKey k: selectableChannels) {
+					if (!k.isValid()) {
+						continue;
+					}
 					channelsProcessed++;
 					// only the server channel is acceptable
 					if (k.isAcceptable() && k==ssk) {
@@ -101,6 +109,41 @@ public class MudServer implements Lifecycle,Runnable {
 			e.printStackTrace();
 		}
 	
+	}
+	
+	public void close(SelectionKey k) {
+		
+		synchronized (selector) {
+			k.cancel();
+		}
+		
+		SocketChannel client = (SocketChannel) k.channel();
+		try {
+			client.close();
+		} catch (IOException e) {
+			logger.warn(
+					"Problem trying to close client connection: "
+							+ e.getMessage(), e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void sendStringToSelectionKey(String s, SelectionKey k) {
+		if (k.isValid()) {
+			Map<String, Object> attribs = (Map<String, Object>) k.attachment();
+			CharsetEncoder enc = (CharsetEncoder) attribs.get("encoder");
+			SocketChannel c = (SocketChannel) k.channel();
+			try {
+				c.write(enc.encode(CharBuffer.wrap(new char[] { '\r','\n' })));
+				c.write(enc.encode(CharBuffer.wrap(s)));
+			} catch (CharacterCodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override

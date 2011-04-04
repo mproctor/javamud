@@ -1,0 +1,14 @@
+<players>
+	<player>
+		<name>test</name>
+		<password>password</password>
+		<description>Here is some description for a player</description>
+		<currentRoomId>-1</currentRoomId>
+	</player>
+	<player>
+		<name>test2</name>
+		<password>password</password>
+		<description>Here is some description for a different player</description>
+		<currentRoomId>-1</currentRoomId>
+	</player>
+</players>

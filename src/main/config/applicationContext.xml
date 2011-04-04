@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd ">
 
 	<bean id="server" class="javamud.server.MudServer">
 		<property name="stateMachine" ref="stateMachine"/>
@@ -10,19 +10,35 @@
 	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newSingleThreadExecutor"/>
 	
 	<bean id="stateMachine" class="javamud.server.MudStateMachine">
-		<property name="playerMappingService" ref="playerMappingService"/>
-		<property name="loginService" ref="loginService"/>
+		<property name="mudServer" ref="server"/>
+		<property name="loginService" ref="playerService"/>
 	</bean>
 	
-	<bean id="loginService" class="javamud.server.DefaultFileLoginService" init-method="init">
-		<property name="playerFileName" value="c:\temp\playerPasswd.txt"/>
+	<bean id="playerService" class="javamud.player.DefaultFilePlayerService" init-method="init">
+		<property name="playerFileName" value="sample-data\player.xml"/>
+		<property name="playerFactory" ref="playerFactory"/>
 	</bean>
-	<bean id="playerMappingService" class="javamud.server.PlayerMappingService"/>
+	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory" init-method="init">
+		<property name="digesterFileName" value="player-digester-rules.xml"/>
+		<property name="playerMappingService" ref="playerMappingService"/>
+	</bean>
+	
+	<bean id="worldService" class="javamud.room.DefaultFileWorldService" init-method="init">
+		<property name="worldFileName" value="sample-data\world.xml"/>
+		<property name="worldFactory" ref="worldFactory"/>
+	</bean>
+	<bean id="worldFactory" class="javamud.room.DefaultXmlFileWorldFactory" init-method="init">
+		<property name="digesterFileName" value="world-digester-rules.xml"/>
+	</bean>
+
+	<bean id="playerMappingService" class="javamud.server.PlayerMappingService">
+		<property name="mudServer" ref="server"/>
+	</bean>
 
 	<bean id="commandParser" class="javamud.command.DefaultCommandParser" init-method="init">
 		<property name="t" ref="trie"/>
 		<property name="cmdMap">
-			<util:map map-class="java.lang.LinkedHashMap" key-type="String" value-type="javamud.command.Command">
+			<util:map map-class="java.util.LinkedHashMap" key-type="String" value-type="javamud.command.Command">
 			</util:map>
 		</property>
 	</bean>

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javamud.player.Player;
+import javamud.player.PlayerService;
 
 /**
  * maintains the mapping between a player on the mud and their
@@ -13,6 +14,11 @@ import javamud.player.Player;
  *
  */
 public class PlayerMappingService {
+	private MudServer mudServer;
+	private PlayerService playerService;
+	public void setMudServer(MudServer mudServer) {
+		this.mudServer = mudServer;
+	}
 
 	private Map<Player,SelectionKey> playerChannel = new ConcurrentHashMap<Player,SelectionKey>();
 	private Map<SelectionKey,Player> channelPlayer = new ConcurrentHashMap<SelectionKey,Player>();
@@ -27,5 +33,22 @@ public class PlayerMappingService {
 		Player p = channelPlayer.get(client);
 		playerChannel.remove(p);
 		channelPlayer.remove(client);
+	}
+	
+	public void sendString(Player p, String s) {
+		mudServer.sendStringToSelectionKey(s, lookup(p));
+	}
+	public Player getPlayerByName(String pName) {
+		for(Player p:playerChannel.keySet()) {
+			if(p.getName().equals(pName)) {
+				return p;
+			}
+		}
+		return null;
+	}
+	public void loadPlayerWithSelectionKey(String pName, SelectionKey k) {
+		Player p = playerService.loadPlayer(pName);
+		playerChannel.put(p,k);
+		channelPlayer.put(k,p);
 	}
 }

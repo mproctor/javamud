@@ -1,0 +1,7 @@
+<rooms>
+	<room>
+		<id>1</id>
+		<title>A test room</title>
+		<description>The first room is not very interesting, perhaps try an exit.</description>
+	</room>
+</rooms>
