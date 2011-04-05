@@ -8,12 +8,20 @@
 	</bean>
 	
 	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newSingleThreadExecutor"/>
+	<bean id="cmdExecutorService" class="java.util.concurrent.Executors" factory-method="newSingleThreadExecutor"/>
+	
 	
 	<bean id="stateMachine" class="javamud.server.MudStateMachine">
 		<property name="mudServer" ref="server"/>
 		<property name="loginService" ref="playerService"/>
+		<property name="playerMappingService" ref="playerMappingService"/>
+		<property name="commandExecutor" ref="commandExecutor"/>
 	</bean>
-	
+	<bean id="commandExecutor" class="javamud.command.DefaultCommandExecutor">
+		<property name="executorService" ref="cmdExecutorService"/>
+		<property name="commandParser" ref="commandParser"/>
+		<property name="playerMappingService" ref="playerMappingService"/>
+	</bean>
 	<bean id="playerService" class="javamud.player.DefaultFilePlayerService" init-method="init">
 		<property name="playerFileName" value="sample-data\player.xml"/>
 		<property name="playerFactory" ref="playerFactory"/>
@@ -33,14 +41,20 @@
 
 	<bean id="playerMappingService" class="javamud.server.PlayerMappingService">
 		<property name="mudServer" ref="server"/>
+		<property name="playerService" ref="playerService"/>
 	</bean>
 
 	<bean id="commandParser" class="javamud.command.DefaultCommandParser" init-method="init">
 		<property name="t" ref="trie"/>
 		<property name="cmdMap">
-			<util:map map-class="java.util.LinkedHashMap" key-type="String" value-type="javamud.command.Command">
+			<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="javamud.command.Command">
+			<entry key="say" value-ref="sayCommand"/>
 			</util:map>
 		</property>
+	</bean>
+	
+	<bean id="sayCommand" class="javamud.command.SayCommand">
+		<property name="worldService" ref="worldService"/>
 	</bean>
 
 	<bean id="trie" class="javamud.data.DefaultTrie"/>

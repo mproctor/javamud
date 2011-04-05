@@ -25,13 +25,16 @@ public class DefaultTrie implements Trie {
 		TrieNode currNode = root;
 		
 		int i=0;
-		for (i=0;i< sArr.length;i++) {
+		for (i=0;i< sArr.length;) {
 			if (currNode.hasChild(sArr[i])) {
 				currNode = currNode.getChild(sArr[i]);
+				i++;
+			} else {
+				break;
 			}
 		}
 		
-		if (i<sArr.length) {
+		if (i<sArr.length || sArr.length==0) {
 			throw new CommandException(s);		// our string is not a substring of something in the trie 
 		} else {
 			return currNode.getCmd();

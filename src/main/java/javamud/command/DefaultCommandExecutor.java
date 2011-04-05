@@ -27,10 +27,10 @@ public class DefaultCommandExecutor implements CommandExecutor {
 		
 		int firstSpace = cmd.indexOf(' ');
 		try {
-			final Command c = commandParser.parse(cmd.substring(0,firstSpace));
+			final Command c = commandParser.parse(firstSpace==-1?cmd:cmd.substring(0,firstSpace));
 			
-			final String cmdArgs = cmd.substring(firstSpace);
-			executorService.submit(new Runnable() {
+			final String cmdArgs = firstSpace==-1?null:cmd.substring(firstSpace);
+			executorService.execute(new Runnable() {
 				
 				//TODO: this only allows a command to return a single string
 				

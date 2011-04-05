@@ -25,8 +25,7 @@ public class DefaultFilePlayerService implements PlayerService,LoginService {
 
 	@Override
 	public Player loadPlayer(String pName) {
-		// TODO Auto-generated method stub
-		return null;
+		return playerDetails.get(pName);
 	}
 	
 	public void init() {

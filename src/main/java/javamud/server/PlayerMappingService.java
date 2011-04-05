@@ -51,4 +51,7 @@ public class PlayerMappingService {
 		playerChannel.put(p,k);
 		channelPlayer.put(k,p);
 	}
+	public void setPlayerService(PlayerService playerService) {
+		this.playerService = playerService;
+	}
 }
