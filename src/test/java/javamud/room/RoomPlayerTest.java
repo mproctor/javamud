@@ -14,7 +14,7 @@ public class RoomPlayerTest {
 	
 	@Before
 	public void setUp() {
-		r1 = new SimpleRoom(1);
+		r1 = new SimpleRoom();
 		p1 = new SimplePlayer();
 		p2 = new SimplePlayer();
 		p3 = new SimplePlayer();

@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javamud.player.Player;
 import javamud.player.PlayerService;
+import javamud.room.Room;
+import javamud.room.WorldService;
 
 /**
  * maintains the mapping between a player on the mud and their
@@ -16,6 +18,8 @@ import javamud.player.PlayerService;
 public class PlayerMappingService {
 	private MudServer mudServer;
 	private PlayerService playerService;
+	private WorldService worldService;
+	
 	public void setMudServer(MudServer mudServer) {
 		this.mudServer = mudServer;
 	}
@@ -33,6 +37,9 @@ public class PlayerMappingService {
 		Player p = channelPlayer.get(client);
 		playerChannel.remove(p);
 		channelPlayer.remove(client);
+		
+		Room r = worldService.lookupRoom(p.getCurrentRoomId());
+		r.removePlayer(p);
 	}
 	
 	public void sendString(Player p, String s) {
@@ -50,8 +57,15 @@ public class PlayerMappingService {
 		Player p = playerService.loadPlayer(pName);
 		playerChannel.put(p,k);
 		channelPlayer.put(k,p);
+		
+		Room r = worldService.lookupRoom(p.getCurrentRoomId());
+		r.addPlayer(p);
 	}
 	public void setPlayerService(PlayerService playerService) {
 		this.playerService = playerService;
 	}
+	public void setWorldService(WorldService worldService) {
+		this.worldService = worldService;
+	}
+	
 }

@@ -251,8 +251,10 @@ public class MudStateMachine {
 			if (s.equals((String) attribs.get("newPlayerPword"))) {
 				loginService.addUser((String) attribs.get("newPlayerName"),
 						(String) attribs.get("newPlayerPword"));
-				attribs.remove("newPlayerName");
+				attribs.put(PLAYER_NAME, attribs.remove("newPlayerName"));
 				attribs.put(STATE_ATTRIB, new LoggedInState());
+				
+				logger.info("Player "+attribs.get(PLAYER_NAME)+" has logged in");
 				return null;
 			} else {
 				attribs.remove("newPlayerPword");

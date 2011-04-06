@@ -11,8 +11,8 @@ public class LinkRoomTest {
 	
 	@Before
 	public void createRooms() {
-		r1 = new SimpleRoom(1);
-		r2 = new SimpleRoom(2);
+		r1 = new SimpleRoom();
+		r2 = new SimpleRoom();
 	}
 	
 	@Test

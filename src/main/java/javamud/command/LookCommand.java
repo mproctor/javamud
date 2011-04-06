@@ -1,15 +1,10 @@
 package javamud.command;
 
 import javamud.player.Player;
-import javamud.room.WorldService;
 import javamud.room.Room;
+import javamud.room.WorldService;
 
-/**
- * repeat the string to the room
- * @author Matthew Proctor
- *
- */
-public class SayCommand implements Command {
+public class LookCommand implements Command {
 
 	private WorldService worldService;
 	public void setWorldService(WorldService worldService) {
@@ -17,15 +12,18 @@ public class SayCommand implements Command {
 	}
 	@Override
 	public String execute(final Player speaker, final String s) {
+		StringBuffer viewDesc = new StringBuffer();
 		int rId = speaker.getCurrentRoomId();
 		Room r = worldService.lookupRoom(rId);
+		viewDesc.append(r.getTitle()).append('\r').append('\n');
+		viewDesc.append(r.getDescription()).append('\r').append('\n');
 		for (Player p:r.getPlayers() ) {
 			if (p != speaker){
-				p.hear(speaker,speaker.getName()+" says \""+s+"\"");
+				viewDesc.append(p.getName()).append('\r').append('\n');
 			}
 		}
 		
-		return "You say: \""+s+"\"";
+		return viewDesc.toString();
 	}
 
 }

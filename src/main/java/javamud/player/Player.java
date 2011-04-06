@@ -1,6 +1,5 @@
 package javamud.player;
 
-import javamud.room.Room;
 
 public interface Player {
 
@@ -9,6 +8,6 @@ public interface Player {
 	public int getId();
 	public int getCurrentRoomId();
 	
-	public void hear(String s);
+	public void hear(Player p,String s);
 	public String getPassword();
 }

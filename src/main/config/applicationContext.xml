@@ -42,6 +42,7 @@
 	<bean id="playerMappingService" class="javamud.server.PlayerMappingService">
 		<property name="mudServer" ref="server"/>
 		<property name="playerService" ref="playerService"/>
+		<property name="worldService" ref="worldService"/>
 	</bean>
 
 	<bean id="commandParser" class="javamud.command.DefaultCommandParser" init-method="init">
@@ -49,11 +50,15 @@
 		<property name="cmdMap">
 			<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="javamud.command.Command">
 			<entry key="say" value-ref="sayCommand"/>
+			<entry key="look" value-ref="lookCommand"/>
 			</util:map>
 		</property>
 	</bean>
 	
 	<bean id="sayCommand" class="javamud.command.SayCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
+	<bean id="lookCommand" class="javamud.command.LookCommand">
 		<property name="worldService" ref="worldService"/>
 	</bean>
 

@@ -52,7 +52,7 @@ public class SimplePlayer implements Player {
 		return currentRoomId;
 	}
 	
-	public void hear(String s) {
+	public void hear(Player spkr,String s) {
 		// TODO: test for deafness
 		// TODO: test for language?
 		playerMappingService.sendString(this,s);

@@ -15,10 +15,6 @@ public class SimpleRoom implements Room {
 	private LinkedList<Player> players = new LinkedList<Player>();
 	private int roomId = -1;
 	private String title,description;
-	
-	public SimpleRoom(int i) {
-		this.roomId = i; 
-	}
 
 	@Override
 	public String getTitle() {
@@ -110,5 +106,13 @@ public class SimpleRoom implements Room {
 	@Override
 	public int numberPlayers() {
 		return players.size();
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}	
 }
