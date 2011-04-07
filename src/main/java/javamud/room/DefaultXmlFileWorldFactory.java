@@ -24,6 +24,8 @@ public class DefaultXmlFileWorldFactory extends AbstractXmlFactory implements Wo
 				rMap.put(room.getId(), room);
 			}
 			
+			linkExits(rooms,rMap);
+			
 			return rMap;
 		} catch (SAXException se) {
 			logger.error("Error parsing the world file: "+se.getMessage(),se);
@@ -33,6 +35,21 @@ public class DefaultXmlFileWorldFactory extends AbstractXmlFactory implements Wo
 		
 		return null;
 
+	}
+	
+	/**
+	 * the xml file only sets the room Id, this will link the
+	 * rooms together to save having to do a lookup all the time
+	 * @param rooms
+	 * @param rIdMap
+	 */
+	public void linkExits(List<Room> rooms,Map<Integer,Room> rIdMap) {
+		for(Room r: rooms) {
+			for (Exit e: r.getExits()) {
+				SimpleExit se = (SimpleExit)e;
+				se.setDestination(rIdMap.get(se.getToRoomId()));				
+			}
+		}
 	}
 
 }

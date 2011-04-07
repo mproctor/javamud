@@ -17,6 +17,7 @@ public class SimpleExit implements Exit {
 	private Set<String> keywords;	// triggers to show description
 	private String title;
 	private String description; 
+	private int toRoomId;
 	private Room destination;
 	private Direction direction;
 	
@@ -39,6 +40,10 @@ public class SimpleExit implements Exit {
 		return description;
 	}
 	
+	public void setToRoomId(String roomId) {
+		this.toRoomId = Integer.parseInt(roomId);
+	}
+	
 	public Room getDestination() {
 		return destination;
 	}
@@ -50,7 +55,7 @@ public class SimpleExit implements Exit {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-	public void setDirection(String direction) {
+	public void setDir(String direction) {
 		this.direction = Direction.lookupDir(direction);
 	}
 
@@ -58,7 +63,7 @@ public class SimpleExit implements Exit {
 		this.destination = destination;
 	}
 
-	public void setStatus(String status) {
+	public void setStatusString(String status) {
 		this.status = ExitStatus.lookupStatus(status);
 	}
 	public void setStatus(ExitStatus status) {
@@ -198,6 +203,10 @@ public class SimpleExit implements Exit {
 			// unable to parse the flag
 			return null;
 		}
+	}
+
+	public int getToRoomId() {
+		return toRoomId;
 	}
 
 }

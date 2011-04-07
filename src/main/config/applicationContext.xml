@@ -51,6 +51,12 @@
 			<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="javamud.command.Command">
 			<entry key="say" value-ref="sayCommand"/>
 			<entry key="look" value-ref="lookCommand"/>
+			<entry key="north" value-ref="northCommand"/>
+			<entry key="south" value-ref="southCommand"/>
+			<entry key="east" value-ref="eastCommand"/>
+			<entry key="west" value-ref="westCommand"/>
+			<entry key="up" value-ref="upCommand"/>
+			<entry key="down" value-ref="downCommand"/>
 			</util:map>
 		</property>
 	</bean>
@@ -61,6 +67,24 @@
 	<bean id="lookCommand" class="javamud.command.LookCommand">
 		<property name="worldService" ref="worldService"/>
 	</bean>
-
+	<bean id="northCommand" class="javamud.command.NorthCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
+	<bean id="southCommand" class="javamud.command.SouthCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
+	<bean id="eastCommand" class="javamud.command.EastCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
+	<bean id="westCommand" class="javamud.command.WestCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
+	<bean id="downCommand" class="javamud.command.DownCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
+	<bean id="upCommand" class="javamud.command.UpCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
+	
 	<bean id="trie" class="javamud.data.DefaultTrie"/>
 </beans>

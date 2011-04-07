@@ -8,5 +8,25 @@
 		<id>1</id>
 		<title>A test room</title>
 		<description>The first room is not very interesting, perhaps try an exit.</description>
+		<exits>
+			<exit dir="north" to="2" status="open"/>
+			<exit dir="west" to="3" status="locked"/>
+		</exits>
+	</room>
+	<room>
+		<id>2</id>
+		<title>A second test room</title>
+		<description>This room is quite small. There is nothing here to hold your attention.</description>
+		<exits>
+			<exit dir="south" to="1" status="open"/>
+		</exits>
+	</room>
+	<room>
+		<id>3</id>
+		<title>A third test room</title>
+		<description>This is a treasure room. There are mounds of gold and jewels on the floor and heavy looking treasure chests.</description>
+		<exits>
+			<exit dir="east" to="1" status="locked"/>
+		</exits>
 	</room>
 </rooms>

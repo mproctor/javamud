@@ -12,5 +12,13 @@
 		propertyname="description" />
 	<bean-property-setter-rule pattern="rooms/room/id"
 		propertyname="id" />
+	<object-create-rule pattern="rooms/room/exits" classname="java.util.HashSet"/>
+		<object-create-rule pattern="rooms/room/exits/exit" classname="javamud.room.SimpleExit"/>
+		<set-properties-rule pattern="rooms/room/exits/exit">
+			<alias attr-name="dir" prop-name="dir"/>
+			<alias attr-name="to" prop-name="toRoomId"/>
+			<alias attr-name="status" prop-name="statusString"/>
+		</set-properties-rule> 
+		<set-next-rule pattern="rooms/room/exits/exit" methodname="add"/>	
 	<set-next-rule pattern="rooms/room" methodname="add" />
 </digester-rules>

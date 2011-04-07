@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javamud.item.Item;
 import javamud.player.Player;
+import javamud.player.SimplePlayer;
 import javamud.room.SimpleExit.Direction;
 
 public class SimpleRoom implements Room {
@@ -74,6 +75,7 @@ public class SimpleRoom implements Room {
 		synchronized(players) {
 			if (!players.contains(p)) {
 				players.add(p);
+				((SimplePlayer)p).setCurrentRoomId(this.roomId);
 			}
 		}
 	}
