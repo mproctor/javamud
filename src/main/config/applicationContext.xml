@@ -29,6 +29,7 @@
 	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory" init-method="init">
 		<property name="digesterFileName" value="player-digester-rules.xml"/>
 		<property name="playerMappingService" ref="playerMappingService"/>
+		<property name="worldService"  ref="worldService"/>
 	</bean>
 	
 	<bean id="worldService" class="javamud.room.DefaultFileWorldService" init-method="init">
@@ -42,7 +43,6 @@
 	<bean id="playerMappingService" class="javamud.server.PlayerMappingService">
 		<property name="mudServer" ref="server"/>
 		<property name="playerService" ref="playerService"/>
-		<property name="worldService" ref="worldService"/>
 	</bean>
 
 	<bean id="commandParser" class="javamud.command.DefaultCommandParser" init-method="init">
@@ -61,30 +61,21 @@
 		</property>
 	</bean>
 	
-	<bean id="sayCommand" class="javamud.command.SayCommand">
-		<property name="worldService" ref="worldService"/>
-	</bean>
-	<bean id="lookCommand" class="javamud.command.LookCommand">
-		<property name="worldService" ref="worldService"/>
-	</bean>
-	<bean id="northCommand" class="javamud.command.NorthCommand">
-		<property name="worldService" ref="worldService"/>
-	</bean>
-	<bean id="southCommand" class="javamud.command.SouthCommand">
-		<property name="worldService" ref="worldService"/>
-	</bean>
-	<bean id="eastCommand" class="javamud.command.EastCommand">
-		<property name="worldService" ref="worldService"/>
-	</bean>
-	<bean id="westCommand" class="javamud.command.WestCommand">
-		<property name="worldService" ref="worldService"/>
-	</bean>
-	<bean id="downCommand" class="javamud.command.DownCommand">
-		<property name="worldService" ref="worldService"/>
-	</bean>
-	<bean id="upCommand" class="javamud.command.UpCommand">
-		<property name="worldService" ref="worldService"/>
-	</bean>
+	<bean id="sayCommand" class="javamud.command.SayCommand"/>
+
+	<bean id="lookCommand" class="javamud.command.LookCommand"/>
+	
+	<bean id="northCommand" class="javamud.command.NorthCommand"/>
+	
+	<bean id="southCommand" class="javamud.command.SouthCommand"/>
+	
+	<bean id="eastCommand" class="javamud.command.EastCommand"/>
+	
+	<bean id="westCommand" class="javamud.command.WestCommand"/>
+	
+	<bean id="downCommand" class="javamud.command.DownCommand"/>
+	
+	<bean id="upCommand" class="javamud.command.UpCommand"/>
 	
 	<bean id="trie" class="javamud.data.DefaultTrie"/>
 </beans>

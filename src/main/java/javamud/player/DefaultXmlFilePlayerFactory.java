@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javamud.room.WorldService;
 import javamud.server.PlayerMappingService;
 import javamud.util.AbstractXmlFactory;
 
@@ -14,9 +15,15 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements PlayerFactory {
+	private WorldService worldService;
 
 	private PlayerMappingService playerMappingService;
 	private static final Logger logger = Logger.getLogger(DefaultXmlFilePlayerFactory.class);
+	
+	public void setWorldService(WorldService worldService) {
+		this.worldService = worldService;
+	}
+
 	@Override
 	public Map<String, Player> loadPlayers(Reader r) {
 		try {
@@ -24,7 +31,10 @@ public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements P
 			
 			Map<String,Player> pMap = new HashMap<String,Player>();
 			for(Player p: players) {
-				((SimplePlayer)p).setPlayerMappingService(playerMappingService);
+				SimplePlayer sp = (SimplePlayer)p;
+				sp.setPlayerMappingService(playerMappingService);
+				
+				sp.setCurrentRoom(worldService.lookupRoom(sp.getCurrentRoomId()));
 				pMap.put(p.getName(), p);
 			}
 			

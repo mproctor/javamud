@@ -16,7 +16,7 @@
 		<object-create-rule pattern="rooms/room/exits/exit" classname="javamud.room.SimpleExit"/>
 		<set-properties-rule pattern="rooms/room/exits/exit">
 			<alias attr-name="dir" prop-name="dir"/>
-			<alias attr-name="to" prop-name="toRoomId"/>
+			<alias attr-name="roomId" prop-name="roomId"/>
 			<alias attr-name="status" prop-name="statusString"/>
 		</set-properties-rule> 
 		<set-next-rule pattern="rooms/room/exits/exit" methodname="add"/>	

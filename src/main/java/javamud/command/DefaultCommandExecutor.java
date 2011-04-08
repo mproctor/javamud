@@ -29,7 +29,7 @@ public class DefaultCommandExecutor implements CommandExecutor {
 		final Player p = playerMappingService.getPlayerByName(pName);
 		
 		if (logger.isDebugEnabled())
-		logger.debug("Player "+p.getName()+" in room "+p.getCurrentRoomId()+" issued command: "+cmd);
+		logger.debug("Player "+p.getName()+" in room "+p.getCurrentRoom().getId()+" issued command: "+cmd);
 		
 		int firstSpace = cmd.indexOf(' ');
 		try {

@@ -18,7 +18,6 @@ import javamud.room.WorldService;
 public class PlayerMappingService {
 	private MudServer mudServer;
 	private PlayerService playerService;
-	private WorldService worldService;
 	
 	public void setMudServer(MudServer mudServer) {
 		this.mudServer = mudServer;
@@ -38,7 +37,7 @@ public class PlayerMappingService {
 		playerChannel.remove(p);
 		channelPlayer.remove(client);
 		
-		Room r = worldService.lookupRoom(p.getCurrentRoomId());
+		Room r = p.getCurrentRoom();
 		r.removePlayer(p);
 	}
 	
@@ -58,14 +57,11 @@ public class PlayerMappingService {
 		playerChannel.put(p,k);
 		channelPlayer.put(k,p);
 		
-		Room r = worldService.lookupRoom(p.getCurrentRoomId());
+		Room r = p.getCurrentRoom();
 		r.addPlayer(p);
 	}
 	public void setPlayerService(PlayerService playerService) {
 		this.playerService = playerService;
-	}
-	public void setWorldService(WorldService worldService) {
-		this.worldService = worldService;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package javamud.player;
 
+import javamud.room.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class DefaultFilePlayerService implements PlayerService,LoginService {
 
 	private String playerFileName;
 
+
 	public void setPlayerFileName(String playerFileName) {
 		this.playerFileName = playerFileName;
 	}
@@ -35,6 +37,7 @@ public class DefaultFilePlayerService implements PlayerService,LoginService {
 			BufferedReader br = new BufferedReader(fr);
 			
 			playerDetails = playerFactory.loadPlayers(br);
+			
 			
 		} catch(IOException ie) {
 			logger.error("Unable to read player login file: "+ie.getMessage(),ie);

@@ -1,6 +1,7 @@
 package javamud.player;
 
 import javamud.server.PlayerMappingService;
+import javamud.room.Room;
 
 public class SimplePlayer implements Player {
 	private String password,name,description;
@@ -11,6 +12,7 @@ public class SimplePlayer implements Player {
 	}
 
 	private int currentRoomId;
+	private Room currentRoom;
 	@Override
 	public String getName() {
 		return name;
@@ -39,6 +41,10 @@ public class SimplePlayer implements Player {
 	public void setCurrentRoomId(int currentRoomId) {
 		this.currentRoomId = currentRoomId;
 	}
+	
+	public void setCurrentRoom(Room currentRoom) {
+		this.currentRoom = currentRoom;
+	}
 
 	@Override
 	public int getId() {
@@ -47,9 +53,9 @@ public class SimplePlayer implements Player {
 	}
 
 	@Override
-	public int getCurrentRoomId() {
+	public Room getCurrentRoom() {
 		// TODO Auto-generated method stub
-		return currentRoomId;
+		return currentRoom;
 	}
 	
 	public void hear(Player spkr,String s) {
@@ -61,6 +67,10 @@ public class SimplePlayer implements Player {
 	@Override
 	public String getPassword() {
 		return password;
+	}
+
+	public int getCurrentRoomId() {
+		return currentRoomId;
 	}
 
 }

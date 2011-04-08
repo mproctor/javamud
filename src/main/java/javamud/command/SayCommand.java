@@ -1,7 +1,6 @@
 package javamud.command;
 
 import javamud.player.Player;
-import javamud.room.WorldService;
 import javamud.room.Room;
 
 /**
@@ -11,14 +10,9 @@ import javamud.room.Room;
  */
 public class SayCommand implements Command {
 
-	private WorldService worldService;
-	public void setWorldService(WorldService worldService) {
-		this.worldService = worldService;
-	}
 	@Override
-	public String execute(final Player speaker, final String s) {
-		int rId = speaker.getCurrentRoomId();
-		Room r = worldService.lookupRoom(rId);
+	public String execute(final Player speaker, final String s) {		
+		Room r = speaker.getCurrentRoom();
 		for (Player p:r.getPlayers() ) {
 			if (p != speaker){
 				p.hear(speaker,speaker.getName()+" says \""+s+"\"");

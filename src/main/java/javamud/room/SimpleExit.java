@@ -40,7 +40,7 @@ public class SimpleExit implements Exit {
 		return description;
 	}
 	
-	public void setToRoomId(String roomId) {
+	public void setRoomId(String roomId) {
 		this.toRoomId = Integer.parseInt(roomId);
 	}
 	
