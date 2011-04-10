@@ -3,22 +3,21 @@
    "-//Jakarta Apache //DTD digester-rules XML V1.0//EN"
    "digester-rules.dtd">
 <digester-rules>
-	<object-create-rule pattern="rooms" classname="java.util.ArrayList" />
-	<object-create-rule pattern="rooms/room"
-		classname="javamud.room.SimpleRoom" />
-		<bean-property-setter-rule pattern="rooms/room/title"
-		propertyname="title" />
-	<bean-property-setter-rule pattern="rooms/room/description"
-		propertyname="description" />
-	<bean-property-setter-rule pattern="rooms/room/id"
-		propertyname="id" />
-	<object-create-rule pattern="rooms/room/exits" classname="java.util.HashSet"/>
-		<object-create-rule pattern="rooms/room/exits/exit" classname="javamud.room.SimpleExit"/>
-		<set-properties-rule pattern="rooms/room/exits/exit">
-			<alias attr-name="dir" prop-name="dir"/>
-			<alias attr-name="roomId" prop-name="roomId"/>
-			<alias attr-name="status" prop-name="statusString"/>
-		</set-properties-rule> 
-		<set-next-rule pattern="rooms/room/exits/exit" methodname="add"/>	
-	<set-next-rule pattern="rooms/room" methodname="add" />
+  <pattern value="rooms">
+	<object-create-rule classname="java.util.ArrayList" />
+	<pattern value="room">
+	  <object-create-rule classname="javamud.room.SimpleRoom" />
+	  <bean-property-setter-rule pattern="title" propertyname="title" />
+	  <bean-property-setter-rule pattern="description" propertyname="description" />
+	  <bean-property-setter-rule pattern="id" propertyname="id" />
+	  <pattern value="exits/exit">
+	    <object-create-rule classname="javamud.room.SimpleExit" />
+        <bean-property-setter-rule pattern="dir" propertyname="dir" />
+	    <bean-property-setter-rule pattern="roomId" propertyname="roomId" />
+	    <bean-property-setter-rule pattern="status" propertyname="statusString" />
+	    <set-next-rule methodname="addExit" />
+	  </pattern>
+	  <set-next-rule methodname="add" />
+	</pattern>
+  </pattern>
 </digester-rules>
