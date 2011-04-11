@@ -7,7 +7,7 @@ import javamud.room.SimpleExit.Direction;
 
 public abstract class AbstractMoveCommand implements Command {
 
-	private static final String NO_SUCH_DIR="No exit in that direction";
+	private static final String NO_SUCH_DIR="No exit in that direction\r\n";
 	private Direction direction;
 	public AbstractMoveCommand(Direction d) {
 		this.direction = d;
@@ -26,9 +26,15 @@ public abstract class AbstractMoveCommand implements Command {
 			Room toRoom = e.getDestination();
 			r.removePlayer(p);			
 			toRoom.addPlayer(p);
+			
+			//TODO: write to players as you leave
+			//TODO: write to players as you arrive
+			
+			return "You head "+direction+".\r\n";
 		}
-		
-		return NO_SUCH_DIR ;
+		else {
+			return NO_SUCH_DIR ;
+		}
 	}
 
 }

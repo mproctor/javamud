@@ -76,6 +76,7 @@ public class SimpleRoom implements Room {
 			if (!players.contains(p)) {
 				players.add(p);
 				((SimplePlayer)p).setCurrentRoomId(this.roomId);
+				((SimplePlayer)p).setCurrentRoom(this);
 			}
 		}
 	}
