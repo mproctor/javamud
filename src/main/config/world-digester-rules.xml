@@ -9,12 +9,10 @@
 	  <object-create-rule classname="javamud.room.SimpleRoom" />
 	  <bean-property-setter-rule pattern="title" propertyname="title" />
 	  <bean-property-setter-rule pattern="description" propertyname="description" />
-	  <bean-property-setter-rule pattern="id" propertyname="id" />
+	  <bean-property-setter-rule pattern="roomId" propertyname="roomId" />
 	  <pattern value="exits/exit">
 	    <object-create-rule classname="javamud.room.SimpleExit" />
-        <bean-property-setter-rule pattern="dir" propertyname="dir" />
-	    <bean-property-setter-rule pattern="roomId" propertyname="roomId" />
-	    <bean-property-setter-rule pattern="status" propertyname="statusString" />
+        <set-properties-rule/>
 	    <set-next-rule methodname="addExit" />
 	  </pattern>
 	  <set-next-rule methodname="add" />

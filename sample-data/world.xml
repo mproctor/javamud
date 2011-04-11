@@ -1,32 +1,32 @@
 <rooms>
 	<room>
-		<id>-1</id>
+		<roomId>-1</roomId>
 		<title>Limbo</title>
 		<description>It seems misty in here, and there is no floor. You float happily and wait for someone to notice you.</description>
 	</room>
 	<room>
-		<id>1</id>
+		<roomId>1</roomId>
 		<title>A test room</title>
 		<description>The first room is not very interesting, perhaps try an exit.</description>
 		<exits>
-			<exit dir="north" roomId="2" status="open"/>
-			<exit dir="west" roomId="3" status="locked"/>
+			<exit dir="north" roomId="2" status="open" description="You see another room ahead."/>
+			<exit dir="west" roomId="3" status="locked" description="There is a door here."/>
 		</exits>
 	</room>
 	<room>
-		<id>2</id>
+		<roomId>2</roomId>
 		<title>A second test room</title>
 		<description>This room is quite small. There is nothing here to hold your attention.</description>
 		<exits>
-			<exit dir="south" roomId="1" status="open"/>
+			<exit dir="south" roomId="1" status="open" description="You see a room ahead."/>
 		</exits>
 	</room>
 	<room>
-		<id>3</id>
+		<roomId>3</roomId>
 		<title>A third test room</title>
 		<description>This is a treasure room. There are mounds of gold and jewels on the floor and heavy looking treasure chests.</description>
 		<exits>
-			<exit dir="east" roomId="1" status="locked"/>
+			<exit dir="east" roomId="1" status="locked" description="There is a door."/>
 		</exits>
 	</room>
 </rooms>

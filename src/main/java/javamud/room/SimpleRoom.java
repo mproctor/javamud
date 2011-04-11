@@ -116,5 +116,9 @@ public class SimpleRoom implements Room {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}	
+	}
+	
+	public void setRoomId(int roomId) {
+		this.roomId = roomId;
+	}
 }

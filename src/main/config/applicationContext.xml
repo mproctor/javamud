@@ -26,7 +26,10 @@
 		<property name="playerFileName" value="sample-data\player.xml"/>
 		<property name="playerFactory" ref="playerFactory"/>
 	</bean>
-	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory" init-method="init">
+	<!--
+	  -  player relies on world to know current room  
+	  -->
+	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory" init-method="init" depends-on="worldFactory">
 		<property name="digesterFileName" value="player-digester-rules.xml"/>
 		<property name="playerMappingService" ref="playerMappingService"/>
 		<property name="worldService"  ref="worldService"/>

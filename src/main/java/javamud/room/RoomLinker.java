@@ -14,14 +14,14 @@ public class RoomLinker {
 		fromExit.setDestination(to);
 		fromExit.setDirection(dir);
 		fromExit.setFlags(flags);
-		fromExit.setStatus(status);
+		fromExit.setExitStatus(status);
 		from.addExit(fromExit);
 		
 		SimpleExit toExit = new SimpleExit();
 		toExit.setDestination(from);
 		toExit.setDirection(Direction.oppositeDirection(dir));
 		toExit.setFlags(flags);
-		toExit.setStatus(status);
+		toExit.setExitStatus(status);
 		to.addExit(toExit);
 	}
 

@@ -63,10 +63,10 @@ public class SimpleExit implements Exit {
 		this.destination = destination;
 	}
 
-	public void setStatusString(String status) {
+	public void setStatus(String status) {
 		this.status = ExitStatus.lookupStatus(status);
 	}
-	public void setStatus(ExitStatus status) {
+	public void setExitStatus(ExitStatus status) {
 		this.status = status;
 	}
 	public void setKeywords(Set<String> keywords) {
@@ -207,6 +207,10 @@ public class SimpleExit implements Exit {
 
 	public int getToRoomId() {
 		return toRoomId;
+	}
+
+	public void setToRoomId(int toRoomId) {
+		this.toRoomId = toRoomId;
 	}
 
 }
