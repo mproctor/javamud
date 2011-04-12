@@ -9,7 +9,6 @@ import javamud.server.PlayerMappingService;
 
 public class DefaultCommandExecutor implements CommandExecutor {
 	private static final Logger logger = Logger.getLogger(DefaultCommandExecutor.class);
-	private PlayerMappingService playerMappingService;
 	
 	private ExecutorService executorService;
 
@@ -17,16 +16,12 @@ public class DefaultCommandExecutor implements CommandExecutor {
 	public void setExecutorService(ExecutorService executorService) {
 		this.executorService = executorService;
 	}
-	public void setPlayerMappingService(PlayerMappingService pms) {
-		this.playerMappingService = pms;
-	}
 	
 	public void setCommandParser(CommandParser commandParser) {
 		this.commandParser = commandParser;
 	}
 	@Override
-	public void executeCommand(String pName,String cmd) {
-		final Player p = playerMappingService.getPlayerByName(pName);
+	public void executeCommand(final Player p,String cmd) {
 		
 		if (logger.isDebugEnabled())
 		logger.debug("Player "+p.getName()+" in room "+p.getCurrentRoom().getId()+" issued command: "+cmd);
@@ -42,12 +37,12 @@ public class DefaultCommandExecutor implements CommandExecutor {
 				
 				@Override
 				public void run() {
-					playerMappingService.sendString(p,c.execute(p, cmdArgs ));					
+					c.execute(p, cmdArgs);					
 				}
 			});
 			
 		} catch(CommandException e) {
-			playerMappingService.sendString(p,  "Unknown command: "+e.getMessage());
+			p.sendResponse("Unknown command: "+e.getMessage());
 		}
 	}
 

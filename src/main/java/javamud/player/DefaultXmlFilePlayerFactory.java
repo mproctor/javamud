@@ -18,8 +18,14 @@ public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements P
 	private WorldService worldService;
 
 	private PlayerMappingService playerMappingService;
+	private PlayerService playerService;
 	private static final Logger logger = Logger.getLogger(DefaultXmlFilePlayerFactory.class);
 	
+	
+	public void setPlayerService(PlayerService playerService) {
+		this.playerService = playerService;
+	}
+
 	public void setWorldService(WorldService worldService) {
 		this.worldService = worldService;
 	}
@@ -33,6 +39,7 @@ public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements P
 			for(Player p: players) {
 				SimplePlayer sp = (SimplePlayer)p;
 				sp.setPlayerMappingService(playerMappingService);
+				sp.setPlayerService(playerService);
 				
 				sp.setCurrentRoom(worldService.lookupRoom(sp.getCurrentRoomId()));
 				pMap.put(p.getName(), p);

@@ -10,7 +10,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.util.Map;
 
-import javamud.command.CommandExecutor;
 import javamud.player.LoginService;
 
 import org.apache.log4j.Logger;
@@ -21,15 +20,11 @@ public class MudStateMachine {
 	private static final String PLAYER_NAME = "playerName";
 	private static final String SELECTION_KEY = "selectionKey";
 	private LoginService loginService;
-	private CommandExecutor commandExecutor;
 	private MudServer mudServer;
 	private PlayerMappingService playerMappingService;
 	
 	public void setPlayerMappingService(PlayerMappingService pms) {
 		this.playerMappingService = pms;
-	}
-	public void setCommandExecutor(CommandExecutor commandExecutor) {
-		this.commandExecutor = commandExecutor;
 	}
 
 	public void setMudServer(MudServer mudServer) {
@@ -182,7 +177,7 @@ public class MudStateMachine {
 		@Override
 		public String runState(String s, Map<String, Object> attribs) {
 			String pName = (String)attribs.get(PLAYER_NAME);
-			commandExecutor.executeCommand(pName,s);
+			playerMappingService.executeCommand(pName,s);
 			
 			return null;
 		}

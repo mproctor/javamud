@@ -15,16 +15,15 @@
 		<property name="mudServer" ref="server"/>
 		<property name="loginService" ref="playerService"/>
 		<property name="playerMappingService" ref="playerMappingService"/>
-		<property name="commandExecutor" ref="commandExecutor"/>
 	</bean>
 	<bean id="commandExecutor" class="javamud.command.DefaultCommandExecutor">
 		<property name="executorService" ref="cmdExecutorService"/>
 		<property name="commandParser" ref="commandParser"/>
-		<property name="playerMappingService" ref="playerMappingService"/>
 	</bean>
 	<bean id="playerService" class="javamud.player.DefaultFilePlayerService" init-method="init">
 		<property name="playerFileName" value="sample-data\player.xml"/>
 		<property name="playerFactory" ref="playerFactory"/>
+		<property name="commandExecutor" ref="commandExecutor"/>
 	</bean>
 	<!--
 	  -  player relies on world to know current room  
@@ -32,6 +31,7 @@
 	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory" init-method="init" depends-on="worldFactory">
 		<property name="digesterFileName" value="player-digester-rules.xml"/>
 		<property name="playerMappingService" ref="playerMappingService"/>
+		<property name="playerService" ref="playerService"/>
 		<property name="worldService"  ref="worldService"/>
 	</bean>
 	

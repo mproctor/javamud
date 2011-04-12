@@ -8,7 +8,7 @@ import javamud.room.*;
 public class LookCommand implements Command {
 
 	@Override
-	public String execute(final Player plyr, final String s) {
+	public void execute(final Player plyr, final String s) {
 		StringBuffer viewDesc = new StringBuffer();
 		Room r = plyr.getCurrentRoom();
 		viewDesc.append(r.getTitle()).append('\r').append('\n');
@@ -36,7 +36,7 @@ public class LookCommand implements Command {
 			}
 		}
 		
-		return viewDesc.toString();
+		plyr.sendResponse(viewDesc.toString());
 	}
 
 }

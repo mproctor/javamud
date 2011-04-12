@@ -6,9 +6,15 @@ import javamud.room.Room;
 public class SimplePlayer implements Player {
 	private String password,name,description;
 
+	private PlayerService playerService;
 	private PlayerMappingService playerMappingService;
+	
+	public void setPlayerService(PlayerService playerService) {
+		this.playerService = playerService;
+	}
+
 	public void setPlayerMappingService(PlayerMappingService playerMappingService) {
-		this.playerMappingService = playerMappingService;
+		this.playerMappingService = playerMappingService;		
 	}
 
 	private int currentRoomId;
@@ -63,6 +69,12 @@ public class SimplePlayer implements Player {
 		// TODO: test for language?
 		playerMappingService.sendString(this,s);
 	}
+	
+	public void seeEvent(Player spkr,String s) {
+		// TODO: test for blindness
+		// TODO: test for invisibility
+		playerMappingService.sendString(this,s);
+	}
 
 	@Override
 	public String getPassword() {
@@ -71,6 +83,19 @@ public class SimplePlayer implements Player {
 
 	public int getCurrentRoomId() {
 		return currentRoomId;
+	}
+
+	@Override
+	public void sendResponse(String s) {
+		playerMappingService.sendString(this,s);		
+	}
+
+	/**
+	 * player has to run this command, args and all
+	 */
+	@Override
+	public void forceCommand(String string) {
+		playerService.runCommand(this, string);
 	}
 
 }

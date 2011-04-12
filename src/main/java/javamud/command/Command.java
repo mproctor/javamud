@@ -4,5 +4,5 @@ import javamud.player.Player;
 
 public interface Command {
 
-	String execute(final Player p,final String s);
+	void execute(final Player p,final String s);
 }

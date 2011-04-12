@@ -63,5 +63,10 @@ public class PlayerMappingService {
 	public void setPlayerService(PlayerService playerService) {
 		this.playerService = playerService;
 	}
+	public void executeCommand(String pName, String s) {
+		final Player p = getPlayerByName(pName);
+
+		playerService.runCommand(p, s);
+	}
 	
 }

@@ -15,26 +15,26 @@ public class TrieTest {
 	
 	private static final Command c1 = new Command() {
 		@Override
-		public String execute(Player p,String s) {	
-			return null;
+		public void execute(Player p,String s) {	
+			return ;
 		}
 	};
 	private static final Command c2 = new Command() {
 		@Override
-		public String execute(Player p,String s) {
-			return null;
+		public void execute(Player p,String s) {
+			return ;
 		}
 	};	
 	private static final Command c3 = new Command() {
 		@Override
-		public String execute(Player p,String s) {
-			return null;
+		public void execute(Player p,String s) {
+			return ;
 		}
 	};
 	private static final Command c4 = new Command() {
 		@Override
-		public String execute(Player p,String s) {
-			return null;
+		public void execute(Player p,String s) {
+			return ;
 		}
 	};
 	@Test

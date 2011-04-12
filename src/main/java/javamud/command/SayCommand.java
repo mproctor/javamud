@@ -10,8 +10,13 @@ import javamud.room.Room;
  */
 public class SayCommand implements Command {
 
+	public static final String SAY_WHAT = "What do you want to say?!";
 	@Override
-	public String execute(final Player speaker, final String s) {		
+	public void execute(final Player speaker, final String s) {	
+		if (s == null) {
+			speaker.sendResponse(SAY_WHAT);
+			return ;
+		}
 		Room r = speaker.getCurrentRoom();
 		for (Player p:r.getPlayers() ) {
 			if (p != speaker){
@@ -19,7 +24,7 @@ public class SayCommand implements Command {
 			}
 		}
 		
-		return "You say: \""+s+"\"";
+		speaker.sendResponse( "You say: \""+s+"\"");
 	}
 
 }

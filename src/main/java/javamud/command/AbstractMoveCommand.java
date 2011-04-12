@@ -18,22 +18,30 @@ public abstract class AbstractMoveCommand implements Command {
 	}
 
 	@Override
-	public  String execute(Player p, String s) {
-		Room r = p.getCurrentRoom();
+	public void execute(Player mover, String s) {
+		Room r = mover.getCurrentRoom();
 		
 		Exit e = r.getExit(direction);
 		if (e != null) {
 			Room toRoom = e.getDestination();
-			r.removePlayer(p);			
-			toRoom.addPlayer(p);
+			for (Player p:r.getPlayers() ) {
+				if (p != mover){
+					p.seeEvent(mover,mover.getName()+" heads "+direction+".");
+				}
+			}
+			r.removePlayer(mover);			
+			toRoom.addPlayer(mover);
+			for (Player p:toRoom.getPlayers() ) {
+				if (p != mover){
+					p.seeEvent(mover,mover.getName()+" arrives from the "+Direction.oppositeDirection(direction)+"");
+				}
+			}
 			
-			//TODO: write to players as you leave
-			//TODO: write to players as you arrive
-			
-			return "You head "+direction+".\r\n";
+			mover.sendResponse("You head "+direction+".\r\n");
+			mover.forceCommand("look");
 		}
 		else {
-			return NO_SUCH_DIR ;
+			mover.sendResponse(NO_SUCH_DIR);
 		}
 	}
 

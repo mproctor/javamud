@@ -8,18 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javamud.player.LoginService;
-
+import javamud.command.*;
 import org.apache.log4j.Logger;
 
 public class DefaultFilePlayerService implements PlayerService,LoginService {
 	private static final Logger logger = Logger.getLogger(DefaultFilePlayerService.class);
 
+	private CommandExecutor commandExecutor;
 	private PlayerFactory playerFactory;
 
 	private Map<String,Player> playerDetails = new HashMap<String,Player>();
 
 	private String playerFileName;
 
+
+	public void setCommandExecutor(CommandExecutor commandExecutor) {
+		this.commandExecutor = commandExecutor;
+	}
 
 	public void setPlayerFileName(String playerFileName) {
 		this.playerFileName = playerFileName;
@@ -78,5 +83,10 @@ public class DefaultFilePlayerService implements PlayerService,LoginService {
 
 	public void setPlayerFactory(PlayerFactory playerFactory) {
 		this.playerFactory = playerFactory;
+	}
+
+	@Override
+	public void runCommand(Player p, String s) {
+		commandExecutor.executeCommand(p, s);		
 	}
 }
