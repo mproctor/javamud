@@ -18,13 +18,32 @@ public class DefaultFileWorldService implements WorldService {
 	private WorldFactory worldFactory;
 	private String worldFileName;
 	
-	private Map<Integer,Room> worldMappings = new HashMap<Integer,Room>();
+	private Map<Integer,Zone> worldMappings = new HashMap<Integer,Zone>();
 	public void setWorldFileName(String worldFileName) {
 		this.worldFileName = worldFileName;
 	}
 	@Override
-	public Room lookupRoom(int rId) {
-		return worldMappings.get(rId);
+	public Zone lookupZone(int zId) {
+		return worldMappings.get(zId);
+	}
+	@Override
+	public Room lookupRoom(int zId,int rId) {
+		Zone z = worldMappings.get(zId);
+		if (z== null) {
+			return getLimboRoom();
+		}
+		
+		Room r = z.lookupRoom(rId);
+		
+		if (r == null) {
+			return getLimboRoom(); 
+		}
+		
+		return r;
+	}
+	
+	private Room getLimboRoom() {
+		return worldMappings.get(-1).lookupRoom(-1);
 	}
 	
 	public void init() {

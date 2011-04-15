@@ -41,7 +41,7 @@ public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements P
 				sp.setPlayerMappingService(playerMappingService);
 				sp.setPlayerService(playerService);
 				
-				sp.setCurrentRoom(worldService.lookupRoom(sp.getCurrentRoomId()));
+				sp.setCurrentRoom(worldService.lookupRoom(sp.getCurrentZoneId(),sp.getCurrentRoomId()));
 				pMap.put(p.getName(), p);
 			}
 			

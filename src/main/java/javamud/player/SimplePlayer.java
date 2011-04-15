@@ -17,7 +17,7 @@ public class SimplePlayer implements Player {
 		this.playerMappingService = playerMappingService;		
 	}
 
-	private int currentRoomId;
+	private int currentRoomId,currentZoneId;
 	private Room currentRoom;
 	@Override
 	public String getName() {
@@ -48,6 +48,10 @@ public class SimplePlayer implements Player {
 		this.currentRoomId = currentRoomId;
 	}
 	
+	public void setCurrentZoneId(int currentZoneId) {
+		this.currentZoneId = currentZoneId;
+	}
+
 	public void setCurrentRoom(Room currentRoom) {
 		this.currentRoom = currentRoom;
 	}
@@ -96,6 +100,10 @@ public class SimplePlayer implements Player {
 	@Override
 	public void forceCommand(String string) {
 		playerService.runCommand(this, string);
+	}
+
+	public int getCurrentZoneId() {
+		return currentZoneId;
 	}
 
 }

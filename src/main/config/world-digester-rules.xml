@@ -3,19 +3,31 @@
    "-//Jakarta Apache //DTD digester-rules XML V1.0//EN"
    "digester-rules.dtd">
 <digester-rules>
-  <pattern value="rooms">
-	<object-create-rule classname="java.util.ArrayList" />
-	<pattern value="room">
-	  <object-create-rule classname="javamud.room.SimpleRoom" />
-	  <bean-property-setter-rule pattern="title" propertyname="title" />
-	  <bean-property-setter-rule pattern="description" propertyname="description" />
-	  <bean-property-setter-rule pattern="roomId" propertyname="roomId" />
-	  <pattern value="exits/exit">
-	    <object-create-rule classname="javamud.room.SimpleExit" />
-        <set-properties-rule/>
-	    <set-next-rule methodname="addExit" />
-	  </pattern>
-	  <set-next-rule methodname="add" />
+	<pattern value="world">
+		<object-create-rule classname="java.util.HashSet" />
+		<pattern value="zone">
+			<object-create-rule classname="javamud.room.SimpleZone" />
+			<set-properties-rule />
+			<pattern value="rooms">
+				<object-create-rule classname="java.util.ArrayList" />
+				<pattern value="room">
+					<object-create-rule classname="javamud.room.SimpleRoom" />
+					<bean-property-setter-rule pattern="title"
+						propertyname="title" />
+					<bean-property-setter-rule pattern="description"
+						propertyname="description" />
+					<bean-property-setter-rule pattern="roomId"
+						propertyname="roomId" />
+					<pattern value="exits/exit">
+						<object-create-rule classname="javamud.room.SimpleExit" />
+						<set-properties-rule />
+						<set-next-rule methodname="addExit" />
+					</pattern>
+					<set-next-rule methodname="add" /> <!-- add rooms to list -->
+				</pattern>
+				<set-next-rule methodname="setRooms" /> <!-- add list of rooms to zone -->
+			</pattern>
+			<set-next-rule methodname="add" /> <!-- add zone to world set -->
+		</pattern>
 	</pattern>
-  </pattern>
 </digester-rules>

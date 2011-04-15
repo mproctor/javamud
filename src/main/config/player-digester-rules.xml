@@ -10,6 +10,8 @@
 		propertyname="name" />
 	<bean-property-setter-rule pattern="players/player/description"
 		propertyname="description" />
+	<bean-property-setter-rule pattern="players/player/currentZoneId"
+		propertyname="currentZoneId" />
 	<bean-property-setter-rule pattern="players/player/currentRoomId"
 		propertyname="currentRoomId" />
 	<bean-property-setter-rule pattern="players/player/password"

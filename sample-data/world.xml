@@ -1,9 +1,15 @@
-<rooms>
+<world>
+<zone id="-1" name="Limbo">
+  <rooms>
 	<room>
 		<roomId>-1</roomId>
 		<title>Limbo</title>
 		<description>It seems misty in here, and there is no floor. You float happily and wait for someone to notice you.</description>
 	</room>
+  </rooms>
+</zone>
+<zone id="1" name="Test Area">
+  <rooms>
 	<room>
 		<roomId>1</roomId>
 		<title>A test room</title>
@@ -30,3 +36,4 @@
 		</exits>
 	</room>
 </rooms>
+</zone></world>

@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface WorldFactory {
 
-	Map<Integer, Room> loadWorld(Reader r);
+	Map<Integer, Zone> loadWorld(Reader r);
 
 }
