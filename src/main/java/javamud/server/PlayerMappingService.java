@@ -41,6 +41,14 @@ public class PlayerMappingService {
 		r.removePlayer(p);
 	}
 	
+	public void disconnectPlayer(Player p) {
+		SelectionKey sk = playerChannel.get(p);
+		playerChannel.remove(p);
+		channelPlayer.remove(sk);
+		Room r = p.getCurrentRoom();
+		r.removePlayer(p);
+	}
+	
 	public void sendString(Player p, String s) {
 		mudServer.sendStringToSelectionKey(s, lookup(p));
 	}

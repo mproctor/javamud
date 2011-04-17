@@ -53,7 +53,7 @@
 		<property name="cmdMap">
 			<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="javamud.command.Command">
 			<entry key="say" value-ref="sayCommand"/>
-			<entry key="look at" value-ref="lookCommand"/>
+			<entry key="look" value-ref="lookCommand"/>
 			<entry key="north" value-ref="northCommand"/>
 			<entry key="south" value-ref="southCommand"/>
 			<entry key="east" value-ref="eastCommand"/>
@@ -61,10 +61,13 @@
 			<entry key="up" value-ref="upCommand"/>
 			<entry key="down" value-ref="downCommand"/>
 			<entry key="load" value-ref="loadCommand"/>
+			<entry key="tell" value-ref="tellCommand"/>
+			<entry key="exit" value-ref="exitCommand"/>
 			</util:map>
 		</property>
 	</bean>
 	
+	<bean id="exitCommand" class="javamud.command.ExitCommand"/>
 	<bean id="sayCommand" class="javamud.command.SayCommand"/>
 
 	<bean id="lookCommand" class="javamud.command.LookCommand"/>
@@ -83,6 +86,7 @@
 	<bean id="loadCommand" class="javamud.command.LoadCommand">
 		<property name="worldService" ref="worldService"/>
 	</bean>
+	<bean id="tellCommand" class="javamud.command.TellCommand"/>
 	
 	<bean id="trie" class="javamud.data.DefaultTrie"/>
 </beans>

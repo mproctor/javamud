@@ -14,4 +14,6 @@ public interface Player {
 	public String getPassword();
 	public void sendResponse(String string);
 	public void forceCommand(String string);
+	
+	public void doLogout();
 }

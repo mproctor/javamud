@@ -6,6 +6,5 @@ public interface LoginService {
 
 	boolean playerExists(String s);
 
-	void addUser(String name, String pword);
-
+	void addUser(String name, String pword);	
 }

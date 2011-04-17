@@ -106,4 +106,9 @@ public class SimplePlayer implements Player {
 		return currentZoneId;
 	}
 
+	@Override
+	public void doLogout() {
+		playerMappingService.disconnectPlayer(this);
+	}
+
 }
