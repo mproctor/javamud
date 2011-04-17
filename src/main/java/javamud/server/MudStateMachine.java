@@ -160,7 +160,7 @@ public class MudStateMachine {
 				SelectionKey k = (SelectionKey)attribs.get(SELECTION_KEY);
 				playerMappingService.loadPlayerWithSelectionKey(pName,k);
 				attribs.put(STATE_ATTRIB, new LoggedInState());
-				playerMappingService.executeCommand(pName,s);
+				playerMappingService.executeCommand(pName,"look");
 				return null;
 			} else {
 				attribs.put(STATE_ATTRIB, new FailState());
@@ -249,7 +249,7 @@ public class MudStateMachine {
 				loginService.addUser(pName, (String) attribs.get("newPlayerPword"));
 				attribs.put(PLAYER_NAME, attribs.remove("newPlayerName"));
 				attribs.put(STATE_ATTRIB, new LoggedInState());
-				playerMappingService.executeCommand(pName,s);
+				playerMappingService.executeCommand(pName,"look");
 				logger.info("Player "+attribs.get(PLAYER_NAME)+" has logged in");
 				return null;
 			} else {

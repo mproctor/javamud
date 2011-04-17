@@ -55,18 +55,49 @@ public class DefaultFileWorldService implements WorldService {
 			worldMappings = worldFactory.loadWorld(br);
 			
 		} catch(IOException ie) {
-			logger.error("Unable to read player login file: "+ie.getMessage(),ie);
+			logger.error("Unable to read world file: "+ie.getMessage(),ie);
 		} finally {
 			if (fr != null) {
 				try {
 					fr.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					logger.error("problem while closing player file: "+e.getMessage(),e);
+					logger.error("problem while closing world file: "+e.getMessage(),e);
 				}
 			}
 		}
 	}
+	@Override
+	public void loadZone(String zoneFileName) {
+		FileReader fr = null;
+		try {
+			fr = new FileReader(zoneFileName);
+			BufferedReader br = new BufferedReader(fr);
+			worldMappings.putAll(worldFactory.loadWorld(br));
+		} catch(IOException ie) {
+			logger.error("Unable to read zone file "+zoneFileName+": "+ie.getMessage(),ie);
+		} finally {
+			if (fr != null) {
+				try {
+					fr.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.error("problem while closing zone file: "+e.getMessage(),e);
+				}
+			}
+		}
+	}
+	@Override
+	public void dropZone(int zId) {		
+		// TODO: look for people in the zone, and do something about it
+		// TODO: abort if people exist?
+		// TODO: relink rooms from other zones that used to link into here
+		logger.info("Dropping zone: "+worldMappings.get(zId).getName()+" ("+zId+")");
+		worldMappings.remove(zId);
+
+	}
+	
+	
 
 
 }

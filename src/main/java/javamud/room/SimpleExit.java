@@ -213,4 +213,9 @@ public class SimpleExit implements Exit {
 		this.toRoomId = toRoomId;
 	}
 
+	@Override
+	public Set<String> getKeywords() {
+		return keywords;
+	}
+
 }
