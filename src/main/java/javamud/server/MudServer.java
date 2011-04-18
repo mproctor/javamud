@@ -75,10 +75,9 @@ public class MudServer implements Lifecycle,Runnable {
 				selector.select();
 				
 				Set<SelectionKey> selectableChannels=null;
-				synchronized(selector) {
-					selectableChannels = selector.selectedKeys();
-				}
 				
+				selectableChannels = selector.selectedKeys();
+
 				int channelsProcessed=0;
 				for(SelectionKey k: selectableChannels) {
 					if (!k.isValid()) {
@@ -112,10 +111,7 @@ public class MudServer implements Lifecycle,Runnable {
 	}
 	
 	public void close(SelectionKey k) {
-		
-		synchronized (selector) {
-			k.cancel();
-		}
+		k.cancel();
 		
 		SocketChannel client = (SocketChannel) k.channel();
 		try {

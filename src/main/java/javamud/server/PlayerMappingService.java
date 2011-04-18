@@ -4,6 +4,8 @@ import java.nio.channels.SelectionKey;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
+
 import javamud.player.Player;
 import javamud.player.PlayerService;
 import javamud.room.Room;
@@ -16,6 +18,7 @@ import javamud.room.WorldService;
  *
  */
 public class PlayerMappingService {
+	private static final Logger logger = Logger.getLogger(PlayerMappingService.class);
 	private MudServer mudServer;
 	private PlayerService playerService;
 	
@@ -47,6 +50,8 @@ public class PlayerMappingService {
 		channelPlayer.remove(sk);
 		Room r = p.getCurrentRoom();
 		r.removePlayer(p);
+		
+		mudServer.close(sk);
 	}
 	
 	public void sendString(Player p, String s) {
@@ -74,7 +79,11 @@ public class PlayerMappingService {
 	public void executeCommand(String pName, String s) {
 		final Player p = getPlayerByName(pName);
 
-		playerService.runCommand(p, s);
+		if (p != null) {
+			playerService.runCommand(p, s);
+		} else {
+			logger.error("Attempt to run command for null player (name:"+pName+", cmd:"+s+")");
+		}
 	}
 	
 }
