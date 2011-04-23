@@ -3,7 +3,7 @@
 		<name>test</name>
 		<password>password</password>
 		<description>Here is some description for a player</description>
-		<currentZoneId>1</currentZoneId>
+		<currentZoneId>100</currentZoneId>
 		<currentRoomId>2</currentRoomId>
 	</player>
 	<player>

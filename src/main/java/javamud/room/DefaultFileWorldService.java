@@ -74,6 +74,7 @@ public class DefaultFileWorldService implements WorldService {
 			fr = new FileReader(zoneFileName);
 			BufferedReader br = new BufferedReader(fr);
 			worldMappings.putAll(worldFactory.loadWorld(br));
+			logger.info("Loaded from zone file: "+zoneFileName);
 		} catch(IOException ie) {
 			logger.error("Unable to read zone file "+zoneFileName+": "+ie.getMessage(),ie);
 		} finally {
@@ -95,6 +96,10 @@ public class DefaultFileWorldService implements WorldService {
 		logger.info("Dropping zone: "+worldMappings.get(zId).getName()+" ("+zId+")");
 		worldMappings.remove(zId);
 
+	}
+	@Override
+	public boolean isZoneLoaded(int currentZoneId) {
+		return worldMappings.containsKey(currentZoneId);
 	}
 	
 	

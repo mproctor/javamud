@@ -5,7 +5,7 @@ import java.util.Set;
 
 import javamud.item.Item;
 import javamud.player.Player;
-import javamud.room.SimpleExit.Direction;
+import javamud.room.Exit.Direction;
 
 public interface Room {
 	public String getTitle();

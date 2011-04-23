@@ -17,9 +17,10 @@ public class SimpleExit implements Exit {
 	private Set<String> keywords;	// triggers to show description
 	private String title;
 	private String description; 
-	private int toRoomId;
+	private int toRoomId=Integer.MIN_VALUE,toZoneId=Integer.MIN_VALUE;
 	private Room destination;
 	private Direction direction;
+	private ExitType exitType;
 	
 	private Set<ExitFlag> flags;
 	
@@ -31,6 +32,10 @@ public class SimpleExit implements Exit {
 		return keyIds.contains(key.getId());
 	}
 	
+	public int getToZoneId() {
+		return toZoneId;
+	}
+
 	@Override
 	public String getTitle() {
 		return title;
@@ -42,6 +47,14 @@ public class SimpleExit implements Exit {
 	
 	public void setRoomId(String roomId) {
 		this.toRoomId = Integer.parseInt(roomId);
+	}
+	
+	public void setZoneId(String zoneId) {
+		this.toZoneId = Integer.parseInt(zoneId);
+	}
+	
+	public void setType(String exitType) {
+		this.exitType = ExitType.lookupType(exitType);
 	}
 	
 	public Room getDestination() {
@@ -111,99 +124,7 @@ public class SimpleExit implements Exit {
 		return flags.contains(ExitFlag.Pickable);
 	}
 	
-	public enum Direction{
-		North("north"),South("south"),East("east"),West("west"),Up("up"),Down("down");
-		
-		private String description;
-		private Direction(String dir) {
-			this.description = dir;
-		}
-		
-		public static Direction oppositeDirection(Direction d) {
-			switch(d) {
-			case North: return South;
-			case South: return North;
-			case East: return West;
-			case West: return East;
-			case Up: return Down;
-			case Down: return Up;
-			default: return null;
-			}
-		}
-		
-		public String getDescription() {
-			return this.description;
-		}
-		
-		public static Direction lookupDir(String dir) {
-			if (null == dir) {
-				throw new IllegalArgumentException("null dir specified to Direction.lookupDir");
-			}
-			for(Direction d: values()) {
-				if (dir.equals(d.description)) {
-					return d;
-				}
-			}
-			
-			// unable to parse the dir
-			return null;
-		}
-	};
-	
-	public enum ExitStatus {
-		Open("open"),Closed("closed"),Locked("locked");
-		
-		private String description;
-		private ExitStatus(String description) {
-			this.description = description;
-		}
-		
-		public String getDescription() {
-			return this.description;
-		}
-		
-		public static ExitStatus lookupStatus(String status) {
-			
-			if (null == status) {
-				throw new IllegalArgumentException("null status specified to ExitStatus.lookupStatus");
-			}
-			for(ExitStatus s: values()) {
-				if (status.equals(s.description)) {
-					return s;
-				}
-			}
-			
-			// unable to parse the status
-			return null;
-		}
-	}
-	
-	public enum ExitFlag {
-		Lockable("lockable"),Pickable("pickable");
-		
-		private String description;
-		private ExitFlag(String desc) {
-			this.description = desc;
-		}
-		
-		public String getDescription() {
-			return this.description;
-		}
-		public static ExitFlag lookupFlag(String flag) {
 
-			if (null == flag) {
-				throw new IllegalArgumentException("null status specified to ExitFlag.lookupFlag");
-			}
-			for(ExitFlag f: values()) {
-				if (flag.equals(f.description)) {
-					return f;
-				}
-			}
-			
-			// unable to parse the flag
-			return null;
-		}
-	}
 
 	public int getToRoomId() {
 		return toRoomId;

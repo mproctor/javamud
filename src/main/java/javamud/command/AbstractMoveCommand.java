@@ -3,7 +3,7 @@ package javamud.command;
 import javamud.player.Player;
 import javamud.room.Exit;
 import javamud.room.Room;
-import javamud.room.SimpleExit.Direction;
+import javamud.room.Exit.Direction;
 
 public abstract class AbstractMoveCommand implements Command {
 

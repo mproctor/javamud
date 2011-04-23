@@ -5,7 +5,7 @@ import java.util.Iterator;
 import javamud.item.Item;
 import javamud.player.Player;
 import javamud.room.*;
-import javamud.room.SimpleExit.Direction;
+import javamud.room.Exit.Direction;
 
 public class LookCommand implements Command {
 

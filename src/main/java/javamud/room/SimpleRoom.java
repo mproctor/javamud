@@ -1,20 +1,21 @@
 package javamud.room;
 
-import java.util.LinkedList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import javamud.item.Item;
 import javamud.player.Player;
-import javamud.player.SimplePlayer;
-import javamud.room.SimpleExit.Direction;
+import javamud.player.AbstractPlayer;
+
+import javamud.room.Exit.Direction;
 
 public class SimpleRoom implements Room {
 	
 	private Set<Exit> exits = new HashSet<Exit>();
 	private LinkedList<Player> players = new LinkedList<Player>();
-	private int roomId = -1;
+	private int roomId = Integer.MIN_VALUE;
 	private String title,description;
 
 	@Override
@@ -48,7 +49,7 @@ public class SimpleRoom implements Room {
 		return exits;
 	}
 
-	public void addExit(Exit e) {
+	public void addExit(Exit e) {		
 		this.exits.add(e);
 	}
 	
@@ -75,8 +76,8 @@ public class SimpleRoom implements Room {
 		synchronized(players) {
 			if (!players.contains(p)) {
 				players.add(p);
-				((SimplePlayer)p).setCurrentRoomId(this.roomId);
-				((SimplePlayer)p).setCurrentRoom(this);
+				((AbstractPlayer)p).setCurrentRoomId(this.roomId);
+				((AbstractPlayer)p).setCurrentRoom(this);
 			}
 		}
 	}

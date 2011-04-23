@@ -6,5 +6,6 @@ public interface WorldService {
 	Zone lookupZone(int zId);
 	void loadZone(String zoneFileName);
 	void dropZone(int zId);
+	boolean isZoneLoaded(int currentZoneId);
 
 }

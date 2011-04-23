@@ -4,20 +4,75 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
-import javamud.player.SimplePlayer;
+import javamud.player.AbstractPlayer;
+import javamud.player.Player;
 
 
 public class RoomPlayerTest {
 
 	private SimpleRoom r1;
-	private SimplePlayer p1,p2,p3;
+	private AbstractPlayer p1,p2,p3;
 	
 	@Before
 	public void setUp() {
 		r1 = new SimpleRoom();
-		p1 = new SimplePlayer();
-		p2 = new SimplePlayer();
-		p3 = new SimplePlayer();
+		p1 = new AbstractPlayer(){
+
+			@Override
+			public void hear(Player p, String s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void seeEvent(Player p, String s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void sendResponse(String string) {
+				// TODO Auto-generated method stub
+				
+			}};
+		p2 = new AbstractPlayer(){
+
+			@Override
+			public void hear(Player p, String s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void seeEvent(Player p, String s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void sendResponse(String string) {
+				// TODO Auto-generated method stub
+				
+			}};
+		p3 = new AbstractPlayer(){
+
+			@Override
+			public void hear(Player p, String s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void seeEvent(Player p, String s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void sendResponse(String string) {
+				// TODO Auto-generated method stub
+				
+			}};
 	}
 	
 	@Test

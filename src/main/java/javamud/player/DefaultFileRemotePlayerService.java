@@ -1,48 +1,43 @@
 package javamud.player;
 
-import javamud.room.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javamud.player.LoginService;
-import javamud.command.*;
+import javamud.command.CommandExecutor;
+
 import org.apache.log4j.Logger;
 
-public class DefaultFilePlayerService implements PlayerService,LoginService {
-	private static final Logger logger = Logger.getLogger(DefaultFilePlayerService.class);
+public class DefaultFileRemotePlayerService implements PlayerService,LoginService {
+	private static final Logger logger = Logger.getLogger(DefaultFileRemotePlayerService.class);
 
 	private CommandExecutor commandExecutor;
-	private PlayerFactory playerFactory;
 
-	private Map<String,Player> playerDetails = new HashMap<String,Player>();
+	private PlayerFactory<RemotePlayer> playerFactory;
+	private Map<String,RemotePlayer> playerDetails = new HashMap<String,RemotePlayer>();
 
 	private String playerFileName;
-
 
 	public void setCommandExecutor(CommandExecutor commandExecutor) {
 		this.commandExecutor = commandExecutor;
 	}
 
+	public void setPlayerFactory(PlayerFactory<RemotePlayer> playerFactory) {
+		this.playerFactory = playerFactory;
+	}
 	public void setPlayerFileName(String playerFileName) {
 		this.playerFileName = playerFileName;
 	}
 
-	@Override
-	public Player loadPlayer(String pName) {
-		return playerDetails.get(pName);
-	}
-	
 	public void init() {
 		FileReader fr = null;
 		try {
 			fr = new FileReader(playerFileName);
 			BufferedReader br = new BufferedReader(fr);
 			
-			playerDetails = playerFactory.loadPlayers(br);
-			
+			playerDetails = playerFactory.loadPlayers(br);		
 			
 		} catch(IOException ie) {
 			logger.error("Unable to read player login file: "+ie.getMessage(),ie);
@@ -59,8 +54,18 @@ public class DefaultFilePlayerService implements PlayerService,LoginService {
 	}
 
 	@Override
+	public Player loadPlayer(String pName) {
+		Player p= playerDetails.get(pName);
+		if (p.getCurrentRoom() == null ) {
+			playerFactory.resetCurrentRoom(p);
+		}
+		
+		return p;
+	}
+
+	@Override
 	public boolean verifyPassword(String pName, String s) {
-		Player p = playerDetails.get(pName);
+		RemotePlayer p = playerDetails.get(pName);
 		if (p != null) {
 			return p.getPassword().equals(s);
 		}
@@ -81,12 +86,9 @@ public class DefaultFilePlayerService implements PlayerService,LoginService {
 		// flush new user to file
 	}
 
-	public void setPlayerFactory(PlayerFactory playerFactory) {
-		this.playerFactory = playerFactory;
-	}
-
 	@Override
 	public void runCommand(Player p, String s) {
 		commandExecutor.executeCommand(p, s);		
 	}
+
 }

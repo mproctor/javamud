@@ -14,7 +14,7 @@ import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements PlayerFactory {
+public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements PlayerFactory<RemotePlayer> {
 	private WorldService worldService;
 
 	private PlayerMappingService playerMappingService;
@@ -31,17 +31,19 @@ public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements P
 	}
 
 	@Override
-	public Map<String, Player> loadPlayers(Reader r) {
+	public Map<String, RemotePlayer> loadPlayers(Reader r) {
 		try {
-			List<Player> players =(List<Player>)digester.parse(r);
+			List<RemotePlayer> players =(List<RemotePlayer>)digester.parse(r);
 			
-			Map<String,Player> pMap = new HashMap<String,Player>();
-			for(Player p: players) {
-				SimplePlayer sp = (SimplePlayer)p;
+			Map<String,RemotePlayer> pMap = new HashMap<String,RemotePlayer>();
+			for(RemotePlayer p: players) {
+				SimpleRemotePlayer sp = (SimpleRemotePlayer)p;
 				sp.setPlayerMappingService(playerMappingService);
 				sp.setPlayerService(playerService);
 				
-				sp.setCurrentRoom(worldService.lookupRoom(sp.getCurrentZoneId(),sp.getCurrentRoomId()));
+				if (worldService.isZoneLoaded(sp.getCurrentZoneId())) {
+					sp.setCurrentRoom(worldService.lookupRoom(sp.getCurrentZoneId(),sp.getCurrentRoomId()));
+				}
 				pMap.put(p.getName(), p);
 			}
 			
@@ -57,6 +59,12 @@ public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements P
 	
 	public void setPlayerMappingService(PlayerMappingService pms) {
 		this.playerMappingService = pms;
+	}
+
+	@Override
+	public void resetCurrentRoom(Player p) {
+		SimpleRemotePlayer sp = (SimpleRemotePlayer)p;
+		sp.setCurrentRoom(worldService.lookupRoom(sp.getCurrentZoneId(),sp.getCurrentRoomId()));
 	}
 
 }

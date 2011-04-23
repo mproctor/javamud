@@ -1,6 +1,6 @@
 package javamud.command;
 
-import javamud.room.SimpleExit.Direction;
+import javamud.room.Exit.Direction;
 
 public class NorthCommand extends AbstractMoveCommand {
 	

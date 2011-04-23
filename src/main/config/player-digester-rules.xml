@@ -5,7 +5,7 @@
 <digester-rules>
 	<object-create-rule pattern="players" classname="java.util.ArrayList" />
 	<object-create-rule pattern="players/player"
-		classname="javamud.player.SimplePlayer" />
+		classname="javamud.player.SimpleRemotePlayer" />
 	<bean-property-setter-rule pattern="players/player/name"
 		propertyname="name" />
 	<bean-property-setter-rule pattern="players/player/description"

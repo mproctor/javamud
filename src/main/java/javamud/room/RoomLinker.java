@@ -1,8 +1,7 @@
 package javamud.room;
 
 import java.util.Set;
-
-import javamud.room.SimpleExit.*;
+import javamud.room.Exit.*;
 
 public class RoomLinker {
 	
