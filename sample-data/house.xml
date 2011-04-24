@@ -1,0 +1,40 @@
+<world>
+<zone id="100" name="House of Pzam">
+  <rooms>
+	<room>
+		<roomId>1</roomId>
+		<title>Entrance Hall</title>
+		<description>This is an entrance hall with a wooden floor.</description>
+		<exits>
+		<exit dir="south" roomId="2" status="open" description="You see an open, glass-panelled door."/>
+		<exit dir="west" roomId="3" status="open" description="You see an open door."/>
+		<exit dir="up" roomId="4" status="open" description="Some carpeted stairs lead up."/>
+		<exit dir="north" zoneId="-1" roomId="-1" type="oneway" status="open" description="The front door leads out."/>
+		</exits>
+	</room>
+	<room>
+		<roomId>2</roomId>
+		<title>Kitchen</title>
+		<description>This is a large kitchen-diner with a wooden floor.</description>
+		<exits>
+		<exit dir="north" roomId="1" status="open" description="You see an open, glass-panelled door."/>
+		</exits>
+	</room>
+	<room>
+		<roomId>3</roomId>
+		<title>Living Room</title>
+		<description>A comfortable room with some sofas, a fireplace and a TV.</description>
+		<exits>
+		<exit dir="east" roomId="1" status="open" description="You see an open door."/>
+		</exits>
+	</room>
+<room>
+		<roomId>4</roomId>
+		<title>Landing</title>
+		<description>This is an upper landing between some rooms.</description>
+		<exits>
+		<exit dir="down" roomId="1" status="open" description="Some carpeted stairs lead down."/>
+		</exits>
+	</room>  </rooms>
+</zone>
+</world>

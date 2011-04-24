@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javamud.player.AutomatedPlayerService;
+
 import org.apache.log4j.Logger;
 
 public class DefaultFileWorldService implements WorldService {
@@ -17,7 +19,13 @@ public class DefaultFileWorldService implements WorldService {
 
 	private WorldFactory worldFactory;
 	private String worldFileName;
+	private AutomatedPlayerService automatedPlayerService;
 	
+	public void setAutomatedPlayerService(
+			AutomatedPlayerService automatedPlayerService) {
+		this.automatedPlayerService = automatedPlayerService;
+	}
+
 	private Map<Integer,Zone> worldMappings = new HashMap<Integer,Zone>();
 	public void setWorldFileName(String worldFileName) {
 		this.worldFileName = worldFileName;
@@ -73,8 +81,14 @@ public class DefaultFileWorldService implements WorldService {
 		try {
 			fr = new FileReader(zoneFileName);
 			BufferedReader br = new BufferedReader(fr);
-			worldMappings.putAll(worldFactory.loadWorld(br));
+			Map<Integer,Zone> newZones = worldFactory.loadWorld(br);
+			worldMappings.putAll(newZones);
+			for(Integer zId:newZones.keySet()) {
+				automatedPlayerService.reloadAutomatedPlayersForZone(zId);
+			}
+			
 			logger.info("Loaded from zone file: "+zoneFileName);
+			
 		} catch(IOException ie) {
 			logger.error("Unable to read zone file "+zoneFileName+": "+ie.getMessage(),ie);
 		} finally {

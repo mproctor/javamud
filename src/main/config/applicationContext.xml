@@ -48,6 +48,7 @@
 	<bean id="worldService" class="javamud.room.DefaultFileWorldService" init-method="init">
 		<property name="worldFileName" value="sample-data\world.xml"/>
 		<property name="worldFactory" ref="worldFactory"/>
+		<property name="automatedPlayerService" ref="autoPlayerService"/>
 	</bean>
 	<bean id="worldFactory" class="javamud.room.DefaultXmlFileWorldFactory" init-method="init">
 		<property name="digesterFileName" value="world-digester-rules.xml"/>
