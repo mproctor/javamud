@@ -1,13 +1,20 @@
 <players>
 	<player>
 		<name>a guard</name>
+		<keywords>
+			<keyword>guard</keyword>
+		</keywords>
 		<description>Big, strong and tough, if you can't benchpress a horse, don't bother applying to be a city guard.</description>
 		<currentZoneId>1</currentZoneId>
 		<currentRoomId>2</currentRoomId>
 	</player>
 	<player>
 		<name>a cat</name>
-		<description>A black and white cat walks around here as if he owns the place.</description>
+		<keywords>
+			<keyword>cat</keyword>
+			<keyword>tiddles</keyword>
+		</keywords>
+		<description>A black and white cat walks around here as if he owns the place. His nametag says "Tiddles".</description>
 		<currentZoneId>100</currentZoneId>
 		<currentRoomId>1</currentRoomId>
 		<routines>

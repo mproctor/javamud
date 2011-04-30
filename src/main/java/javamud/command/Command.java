@@ -23,7 +23,7 @@ public interface Command {
 			for(Player p: looker.getCurrentRoom().getPlayers()) {
 				
 				// TODO: visibility check, can looker see p?
-				if (p.getName().equals(name)) {
+				if (p.hasKeyword(name)) {
 					itemNo--;
 					if (itemNo == 0) {
 						return p;
@@ -70,7 +70,7 @@ public interface Command {
 			
 			for (Exit e: looker.getCurrentRoom().getExits()) {
 				// TODO: visibility check, hidden exit?
-				if (e.getKeywords().contains(descr)) {
+				if (e.hasKeyword(descr)) {
 					itemNo--;
 					if (itemNo ==0) {
 						return e;

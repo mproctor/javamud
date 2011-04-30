@@ -42,4 +42,9 @@ public class SimpleRemotePlayer extends AbstractPlayer implements RemotePlayer {
 		// TODO: test for invisibility
 		playerMappingService.sendString(this,s);
 	}
+
+	@Override
+	public boolean hasKeyword(String name) {
+		return getName().equals(name);
+	}
 }

@@ -1,6 +1,8 @@
 package javamud.player;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -11,8 +13,25 @@ public class SimpleAutomatedPlayer extends AbstractPlayer implements AutomatedPl
 
 	private static final Logger logger = Logger.getLogger(SimpleAutomatedPlayer.class);
 	private Set<Routine> routines = new HashSet<Routine>();
+	private List<String> keywords;
 	
+	public void setKeywords(List<String> keywords) {
+		this.keywords = keywords;
+	}
 	
+	public void setKeyword(String kw) {
+		if (this.keywords == null) {
+			this.keywords = new ArrayList<String>();
+		}
+		
+		this.keywords.add(kw);
+	}
+	
+	public boolean hasKeyword(String k) {
+		return this.keywords != null && this.keywords.contains(k);
+	}
+
+
 	public void addRoutine(Routine routine) {
 		this.routines.add(routine);
 	}

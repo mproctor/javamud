@@ -7,5 +7,5 @@ public interface WorldService {
 	void loadZone(String zoneFileName);
 	void dropZone(int zId);
 	boolean isZoneLoaded(int currentZoneId);
-
+	public Room getLimboRoom();
 }

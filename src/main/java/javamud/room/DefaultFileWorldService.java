@@ -50,7 +50,7 @@ public class DefaultFileWorldService implements WorldService {
 		return r;
 	}
 	
-	private Room getLimboRoom() {
+	public Room getLimboRoom() {
 		return worldMappings.get(-1).lookupRoom(-1);
 	}
 	

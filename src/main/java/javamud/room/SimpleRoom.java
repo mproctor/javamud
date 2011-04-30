@@ -17,6 +17,7 @@ public class SimpleRoom implements Room {
 	private LinkedList<Player> players = new LinkedList<Player>();
 	private int roomId = Integer.MIN_VALUE;
 	private String title,description;
+	private Zone zone;
 
 	@Override
 	public String getTitle() {
@@ -122,5 +123,14 @@ public class SimpleRoom implements Room {
 	
 	public void setRoomId(int roomId) {
 		this.roomId = roomId;
+	}
+	
+	@Override
+	public String toString() {
+		return "Room [Zone:"+(zone==null?"null":zone.getId())+" Room:"+getId()+"]";
+	}
+	
+	public void setZone(Zone z) {
+		this.zone=z;
 	}
 }

@@ -34,6 +34,12 @@ public class RoomPlayerTest {
 			public void sendResponse(String string) {
 				// TODO Auto-generated method stub
 				
+			}
+
+			@Override
+			public boolean hasKeyword(String name) {
+				// TODO Auto-generated method stub
+				return false;
 			}};
 		p2 = new AbstractPlayer(){
 
@@ -53,6 +59,12 @@ public class RoomPlayerTest {
 			public void sendResponse(String string) {
 				// TODO Auto-generated method stub
 				
+			}
+
+			@Override
+			public boolean hasKeyword(String name) {
+				// TODO Auto-generated method stub
+				return false;
 			}};
 		p3 = new AbstractPlayer(){
 
@@ -72,6 +84,12 @@ public class RoomPlayerTest {
 			public void sendResponse(String string) {
 				// TODO Auto-generated method stub
 				
+			}
+
+			@Override
+			public boolean hasKeyword(String name) {
+				// TODO Auto-generated method stub
+				return false;
 			}};
 	}
 	

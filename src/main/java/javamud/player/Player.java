@@ -13,4 +13,5 @@ public interface Player {
 	public void seeEvent(Player p,String s);
 	public void sendResponse(String string);
 	public void forceCommand(String string);
+	public boolean hasKeyword(String name);
 }

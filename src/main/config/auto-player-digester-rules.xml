@@ -11,6 +11,9 @@
 			<bean-property-setter-rule pattern="description" propertyname="description" />
 			<bean-property-setter-rule pattern="currentZoneId" propertyname="currentZoneId" />
 			<bean-property-setter-rule pattern="currentRoomId" propertyname="currentRoomId" />
+			<pattern value="keywords">
+				<bean-property-setter-rule pattern="keyword" propertyname="keyword"/>
+			</pattern>			
 			<set-next-rule methodname="add" />
 		</pattern>
 	</pattern>

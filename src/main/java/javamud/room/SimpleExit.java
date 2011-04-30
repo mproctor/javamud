@@ -139,4 +139,9 @@ public class SimpleExit implements Exit {
 		return keywords;
 	}
 
+	@Override
+	public boolean hasKeyword(String descr) {
+		return this.keywords != null && this.keywords.contains(descr);
+	}
+
 }

@@ -91,17 +91,29 @@
 
 	<bean id="lookCommand" class="javamud.command.LookCommand"/>
 	
-	<bean id="northCommand" class="javamud.command.NorthCommand"/>
+	<bean id="northCommand" class="javamud.command.NorthCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
 	
-	<bean id="southCommand" class="javamud.command.SouthCommand"/>
+	<bean id="southCommand" class="javamud.command.SouthCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
 	
-	<bean id="eastCommand" class="javamud.command.EastCommand"/>
+	<bean id="eastCommand" class="javamud.command.EastCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
 	
-	<bean id="westCommand" class="javamud.command.WestCommand"/>
+	<bean id="westCommand" class="javamud.command.WestCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
 	
-	<bean id="downCommand" class="javamud.command.DownCommand"/>
+	<bean id="downCommand" class="javamud.command.DownCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
 	
-	<bean id="upCommand" class="javamud.command.UpCommand"/>
+	<bean id="upCommand" class="javamud.command.UpCommand">
+		<property name="worldService" ref="worldService"/>
+	</bean>
 	<bean id="loadCommand" class="javamud.command.LoadCommand">
 		<property name="worldService" ref="worldService"/>
 	</bean>

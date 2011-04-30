@@ -142,4 +142,6 @@ public interface Exit {
 		}
 	}
 
+	public boolean hasKeyword(String descr);
+
 }
