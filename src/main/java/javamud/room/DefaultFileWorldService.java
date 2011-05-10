@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javamud.player.AutomatedPlayerService;
 
@@ -19,12 +20,7 @@ public class DefaultFileWorldService implements WorldService {
 
 	private WorldFactory worldFactory;
 	private String worldFileName;
-	private AutomatedPlayerService automatedPlayerService;
 	
-	public void setAutomatedPlayerService(
-			AutomatedPlayerService automatedPlayerService) {
-		this.automatedPlayerService = automatedPlayerService;
-	}
 
 	private Map<Integer,Zone> worldMappings = new HashMap<Integer,Zone>();
 	public void setWorldFileName(String worldFileName) {
@@ -76,21 +72,20 @@ public class DefaultFileWorldService implements WorldService {
 		}
 	}
 	@Override
-	public void loadZone(String zoneFileName) {
+	public Set<Integer> loadZone(String zoneFileName) {
 		FileReader fr = null;
+		Map<Integer,Zone> newZones = null;
 		try {
 			fr = new FileReader(zoneFileName);
 			BufferedReader br = new BufferedReader(fr);
-			Map<Integer,Zone> newZones = worldFactory.loadWorld(br);
+			newZones = worldFactory.loadWorld(br);
 			worldMappings.putAll(newZones);
-			for(Integer zId:newZones.keySet()) {
-				automatedPlayerService.reloadAutomatedPlayersForZone(zId);
-			}
 			
 			logger.info("Loaded from zone file: "+zoneFileName);
 			
 		} catch(IOException ie) {
 			logger.error("Unable to read zone file "+zoneFileName+": "+ie.getMessage(),ie);
+			newZones=null;
 		} finally {
 			if (fr != null) {
 				try {
@@ -101,6 +96,7 @@ public class DefaultFileWorldService implements WorldService {
 				}
 			}
 		}
+		return newZones==null?null:newZones.keySet();
 	}
 	@Override
 	public void dropZone(int zId) {		

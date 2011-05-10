@@ -25,21 +25,21 @@
 		<property name="playerFactory" ref="playerFactory"/>
 		<property name="commandExecutor" ref="commandExecutor"/>
 	</bean>
-	<bean id="autoPlayerService" class="javamud.player.DefaultFileAutomatedPlayerService" init-method="init">
+	<bean id="autoPlayerService" class="javamud.player.DefaultFileAutomatedPlayerService" init-method="init" >
 		<property name="playerFileName" value="sample-data\npc.xml"/>
 		<property name="playerFactory" ref="autoPlayerFactory"/>
 	</bean>
 	<!--
 	  -  player relies on world to know current room  
 	  -->
-	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory" init-method="init" depends-on="worldFactory">
+	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory" init-method="init" >
 		<property name="digesterFileName" value="player-digester-rules.xml"/>
 		<property name="playerMappingService" ref="playerMappingService"/>
 		<property name="playerService" ref="playerService"/>
 		<property name="worldService"  ref="worldService"/>
 	</bean>
 	
-	<bean id="autoPlayerFactory" class="javamud.player.DefaultXmlFileAutomatedPlayerFactory" init-method="init" depends-on="worldFactory">
+	<bean id="autoPlayerFactory" class="javamud.player.DefaultXmlFileAutomatedPlayerFactory" init-method="init" >
 		<property name="digesterFileName" value="auto-player-digester-rules.xml"/>
 		<property name="playerService" ref="playerService"/>
 		<property name="worldService"  ref="worldService"/>
@@ -48,7 +48,6 @@
 	<bean id="worldService" class="javamud.room.DefaultFileWorldService" init-method="init">
 		<property name="worldFileName" value="sample-data\world.xml"/>
 		<property name="worldFactory" ref="worldFactory"/>
-		<property name="automatedPlayerService" ref="autoPlayerService"/>
 	</bean>
 	<bean id="worldFactory" class="javamud.room.DefaultXmlFileWorldFactory" init-method="init">
 		<property name="digesterFileName" value="world-digester-rules.xml"/>
@@ -116,6 +115,7 @@
 	</bean>
 	<bean id="loadCommand" class="javamud.command.LoadCommand">
 		<property name="worldService" ref="worldService"/>
+		<property name="automatedPlayerService" ref="autoPlayerService"/>
 	</bean>
 	<bean id="tellCommand" class="javamud.command.TellCommand"/>
 	
