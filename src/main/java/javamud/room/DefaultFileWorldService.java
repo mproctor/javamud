@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -79,6 +80,11 @@ public class DefaultFileWorldService implements WorldService {
 			fr = new FileReader(zoneFileName);
 			BufferedReader br = new BufferedReader(fr);
 			newZones = worldFactory.loadWorld(br);
+			
+			for(Zone z: newZones.values()) {
+				linkExits(((SimpleZone)z).getRooms(),((SimpleZone)z).getRMap());
+			}
+			
 			worldMappings.putAll(newZones);
 			
 			logger.info("Loaded from zone file: "+zoneFileName);
@@ -112,7 +118,32 @@ public class DefaultFileWorldService implements WorldService {
 		return worldMappings.containsKey(currentZoneId);
 	}
 	
-	
+	/**
+	 * the xml file only sets the room Id, this will link the
+	 * rooms together to save having to do a lookup all the time
+	 * @param rooms
+	 * @param rIdMap
+	 */
+	public void linkExits(List<Room> rooms,Map<Integer,Room> rIdMap) {
+		for(Room r: rooms) {
+			for (Exit e: r.getExits()) {
+				SimpleExit se = (SimpleExit)e;
+				
+				if (se.getToZoneId() == Integer.MIN_VALUE) {
+					se.setDestination(rIdMap.get(se.getToRoomId()));
+				} else {
+					// we need to lookup the room in a different Zone
+					SimpleZone remoteZone = (SimpleZone) worldMappings.get(se.getToZoneId());
+					if (remoteZone == null) {
+						logger.error("Non-existant Zone specified as destination for room: "+r);
+					} else {
+						se.setDestination(remoteZone.getRMap().get(se.getToRoomId()));
+					}
+					
+				}
+			}
+		}
+	}
 
 
 }

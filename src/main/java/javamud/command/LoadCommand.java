@@ -30,7 +30,7 @@ public class LoadCommand implements Command {
 		if ("zone".equals(cmd[0].toLowerCase())) {
 			Set<Integer> zoneIds = worldService.loadZone(cmd[1]);
 			for(Integer i: zoneIds) {
-				
+				automatedPlayerService.reloadAutomatedPlayersForZone(i);
 			}
 		}
 	}

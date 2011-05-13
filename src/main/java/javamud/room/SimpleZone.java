@@ -17,6 +17,10 @@ public class SimpleZone implements Zone {
 	public void setRMap(Map<Integer,Room> rm) {
 		rMap = rm;
 	}
+	
+	public Map<Integer,Room> getRMap() {
+		return rMap;
+	}
 
 	public List<Room> getRooms() {
 		return rooms;
