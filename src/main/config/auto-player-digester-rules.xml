@@ -13,7 +13,23 @@
 			<bean-property-setter-rule pattern="currentRoomId" propertyname="currentRoomId" />
 			<pattern value="keywords">
 				<bean-property-setter-rule pattern="keyword" propertyname="keyword"/>
-			</pattern>			
+			</pattern>	
+			<pattern value="routines">
+				<object-create-rule classname="java.util.HashSet" />
+				<pattern value="routine">
+					<object-create-rule classname="javamud.routine.SimpleRoutine"/>
+					<pattern value="params">
+						<object-create-rule classname="java.util.ArrayList" />
+						<pattern value="param">
+							<object-create-rule classname="javamud.routine.SimpleParam"/>
+							<set-next-rule methodname="add" /> <!-- add a param -->
+						</pattern>
+						<set-next-rule methodname="addParams"/>
+					</pattern>
+					<set-next-rule methodname="add" /> <!-- add routine to set -->
+				</pattern>
+				<set-next-rule methodname="addRoutines"/>
+			</pattern>		
 			<set-next-rule methodname="add" />
 		</pattern>
 	</pattern>
