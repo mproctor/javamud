@@ -57,6 +57,18 @@ public class DefaultXmlFilePlayerFactory extends AbstractXmlFactory implements P
 		return null;
 	}
 	
+	/**
+	 * creates an empty player and sets the mapping service
+	 * caller will need to set any other fields (name/password/description)
+	 */
+	@Override
+	public RemotePlayer createNewPlayer() {
+		SimpleRemotePlayer p = new SimpleRemotePlayer();
+		p.setPlayerMappingService(playerMappingService);
+		
+		return p;
+	}
+	
 	public void setPlayerMappingService(PlayerMappingService pms) {
 		this.playerMappingService = pms;
 	}

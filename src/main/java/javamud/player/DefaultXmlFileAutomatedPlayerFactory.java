@@ -58,6 +58,16 @@ public class DefaultXmlFileAutomatedPlayerFactory extends AbstractXmlFactory imp
 		
 		return null;
 	}
+	
+	/**
+	 * caller needs to fill in all the details
+	 */
+	@Override
+	public AutomatedPlayer createNewPlayer() {
+		SimpleAutomatedPlayer p = new SimpleAutomatedPlayer();
+		p.setPlayerService(playerService);
+		return p;
+	}
 
 	@Override
 	public void resetCurrentRoom(Player p) {

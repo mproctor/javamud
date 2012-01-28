@@ -73,6 +73,7 @@ public class PlayerMappingService {
 		Room r = p.getCurrentRoom();
 		r.addPlayer(p);
 	}
+	
 	public void setPlayerService(PlayerService playerService) {
 		this.playerService = playerService;
 	}

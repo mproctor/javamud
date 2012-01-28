@@ -79,10 +79,14 @@ public class DefaultFileRemotePlayerService implements PlayerService,LoginServic
 	}
 
 	@Override
-	public void addUser(String name, String pword) {
-		logger.info("adding new user "+name);
+	public void addNewPlayer(String name, String pword) {
+		logger.info("adding new player "+name);
 //		loginDetails.put(name, pword);	
-		
+		SimpleRemotePlayer p = (SimpleRemotePlayer) playerFactory.createNewPlayer();
+		p.setName(name);
+		p.setPassword(pword);
+		p.setDescription("The fresh faced appearance of someone who has yet to be killed by a rabbit");
+		playerDetails.put(name, p);
 		// flush new user to file
 	}
 
