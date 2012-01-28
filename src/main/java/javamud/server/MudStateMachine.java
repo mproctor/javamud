@@ -70,7 +70,6 @@ public class MudStateMachine {
 		SocketChannel client = (SocketChannel)k.channel();
 		StringBuffer sb = (StringBuffer)attribs.get(STRING_BUFFER);
 		ClientState state = (ClientState)attribs.get(STATE_ATTRIB);
-		
 		// choke if we already failed
 		if (state instanceof FailState) {
 			mudServer.sendStringToSelectionKey("Login failed.", k);
@@ -101,6 +100,8 @@ public class MudStateMachine {
 					if (response != null) {
 						mudServer.sendStringToSelectionKey(response, k);
 					}
+	        	} else {
+	        		sb.setLength(0);
 	        	}
 			} catch (CharacterCodingException e) {
 				logger.warn("Problem processing incoming message: "+e.getMessage(),e);
