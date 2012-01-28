@@ -8,6 +8,7 @@ import javamud.player.Player;
 import javamud.room.Exit.Direction;
 
 public interface Room {
+	public static int ROOMID_NULL=Integer.MIN_VALUE;
 	public String getTitle();
 	public String getDescription();
 	public int getId();

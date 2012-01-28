@@ -15,7 +15,7 @@ public class SimpleRoom implements Room {
 	
 	private Set<Exit> exits = new HashSet<Exit>();
 	private LinkedList<Player> players = new LinkedList<Player>();
-	private int roomId = Integer.MIN_VALUE;
+	private int roomId = Room.ROOMID_NULL;
 	private String title,description;
 	private Zone zone;
 

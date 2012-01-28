@@ -71,6 +71,7 @@ public class MudServer implements Lifecycle,Runnable {
 
 	public void run() {
 		try {
+			logger.info("Running the select() loop");
 			while(running) {
 				selector.select();
 				
@@ -104,6 +105,7 @@ public class MudServer implements Lifecycle,Runnable {
 					// we don't check for writeable
 				}
 			}
+			logger.info("Exitting the select() loop");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

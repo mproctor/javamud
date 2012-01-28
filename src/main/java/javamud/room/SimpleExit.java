@@ -17,7 +17,7 @@ public class SimpleExit implements Exit {
 	private Set<String> keywords;	// triggers to show description
 	private String title;
 	private String description; 
-	private int toRoomId=Integer.MIN_VALUE,toZoneId=Integer.MIN_VALUE;
+	private int toRoomId=Room.ROOMID_NULL,toZoneId=Zone.ZONEID_NULL;
 	private Room destination;
 	private Direction direction;
 	private ExitType exitType;

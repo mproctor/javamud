@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class SimpleZone implements Zone {
 	
-	private int id;
+	private int id=Zone.ZONEID_NULL;
 	private String name;
 	private List<Room> rooms;
 	private Map<Integer,Room> rMap;
