@@ -1,5 +1,6 @@
 package javamud.data;
 
+import java.util.List;
 import java.util.Map;
 
 import javamud.command.Command;
@@ -14,8 +15,19 @@ import javamud.command.CommandException;
 public interface Trie {
 	Command getCommandAtWord(String s) throws CommandException;
 	
-	void addCommand(String s,Command c);
+	/**
+	 * 
+	 * @param s
+	 * @param c
+	 * @param e require exact match (if false supports substring)
+	 */
+	void addCommand(String s,Command c,boolean e);
 	
-	void init(Map<String, Command> m);
+	/**
+	 * Map the strings to commands. Allow substrings unless command in "e"
+	 * @param m
+	 * @param e
+	 */
+	void init(Map<String, Command> m,List<String> e);
 
 }

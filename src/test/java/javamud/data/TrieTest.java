@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 
 import javamud.command.Command;
 import javamud.command.CommandException;
+import javamud.data.DefaultTrie.IncompleteCommand;
 import javamud.player.Player;
 
 import org.junit.Test;
@@ -40,14 +41,33 @@ public class TrieTest {
 	@Test
 	public void testSubstring() {
 		Trie t = new DefaultTrie();
-		t.addCommand("test", c1);
+		t.addCommand("test", c1, false);
 		
 		try {
 		assertEquals(c1, t.getCommandAtWord("test"));
 		assertEquals(c1, t.getCommandAtWord("tes"));
 		assertEquals(c1, t.getCommandAtWord("te"));
 		assertEquals(c1, t.getCommandAtWord("t"));
-		} catch(CommandException c) {assertTrue(false);}
+		} catch(CommandException c) {fail();}
+	}
+	
+	@Test
+	public void testExactMatch() {
+		Trie t = new DefaultTrie();
+		t.addCommand("test", c1, true);
+		
+		try {
+		assertEquals(c1, t.getCommandAtWord("test"));
+		Command rc = t.getCommandAtWord("tes");
+
+		assertTrue(rc instanceof IncompleteCommand);
+		
+		rc = t.getCommandAtWord("te");
+		assertTrue(rc instanceof IncompleteCommand);
+		
+		rc = t.getCommandAtWord("t");
+		assertTrue(rc instanceof IncompleteCommand);
+		} catch(CommandException c) {fail();}
 	}
 	
 	/**
@@ -57,8 +77,8 @@ public class TrieTest {
 	@Test
 	public void testSharedRoot() {
 		Trie t = new DefaultTrie();
-		t.addCommand("start", c1);
-		t.addCommand("stand", c2);
+		t.addCommand("start", c1,false);
+		t.addCommand("stand", c2,false);
 		
 		try {
 		assertEquals(c2, t.getCommandAtWord("stand"));
@@ -75,8 +95,8 @@ public class TrieTest {
 	@Test
 	public void testDistinctRoot() {
 		Trie t = new DefaultTrie();
-		t.addCommand("north", c1);
-		t.addCommand("south", c2);
+		t.addCommand("north", c1,false);
+		t.addCommand("south", c2,false);
 		try {
 		assertEquals(c2, t.getCommandAtWord("south"));
 		assertEquals(c2, t.getCommandAtWord("sout"));
@@ -99,7 +119,7 @@ public class TrieTest {
 		m.put("north",c1);
 		m.put("south", c2);
 		
-		t.init(m);
+		t.init(m,null);
 		
 		try {
 		assertEquals(c2, t.getCommandAtWord("south"));

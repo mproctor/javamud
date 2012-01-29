@@ -68,6 +68,7 @@
 
 	<bean id="commandParser" class="javamud.command.DefaultCommandParser" init-method="init">
 		<property name="t" ref="trie"/>
+		<property name="exact"><list><value>quit</value></list></property>
 		<property name="cmdMap">
 			<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="javamud.command.Command">
 			<entry key="say" value-ref="sayCommand"/>
@@ -80,7 +81,7 @@
 			<entry key="down" value-ref="downCommand"/>
 			<entry key="load" value-ref="loadCommand"/>
 			<entry key="tell" value-ref="tellCommand"/>
-			<entry key="exit" value-ref="exitCommand"/>
+			<entry key="quit" value-ref="exitCommand"/>
 			</util:map>
 		</property>
 	</bean>
