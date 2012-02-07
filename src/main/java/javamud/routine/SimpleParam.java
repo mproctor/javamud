@@ -1,8 +1,9 @@
 package javamud.routine;
 
-public class SimpleParam {
+public class SimpleParam implements Param {
 	private String name,value;
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -11,6 +12,7 @@ public class SimpleParam {
 		this.name = n;
 	}
 
+	@Override
 	public String getValue() {
 		return value;
 	}

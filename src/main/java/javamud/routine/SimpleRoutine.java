@@ -7,7 +7,7 @@ public abstract class SimpleRoutine implements Routine{
 	
 	private Map<String,String> params = new HashMap<String,String>();
 	
-	public void addParam(SimpleParam p) {
+	public void addParam(Param p) {
 		params.put(p.getName(),p.getValue());
 	}
 
