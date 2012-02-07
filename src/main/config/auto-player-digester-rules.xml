@@ -14,21 +14,15 @@
 			<pattern value="keywords">
 				<bean-property-setter-rule pattern="keyword" propertyname="keyword"/>
 			</pattern>	
-			<pattern value="routines">
-				<object-create-rule classname="java.util.HashSet" />
-				<pattern value="routine">
-					<object-create-rule classname="javamud.routine.SimpleRoutine"/>
-					<pattern value="params">
-						<object-create-rule classname="java.util.ArrayList" />
-						<pattern value="param">
-							<object-create-rule classname="javamud.routine.SimpleParam"/>
-							<set-next-rule methodname="add" /> <!-- add a param -->
-						</pattern>
-						<set-next-rule methodname="addParams"/>
+			<pattern value="routines/routine">
+			
+					<factory-create-rule classname="javamud.routine.RoutineFactory" />
+					<pattern value="params/param">
+						<object-create-rule classname="javamud.routine.SimpleParam"/>
+						<set-properties-rule />
+						<set-next-rule methodname="addParam"/>
 					</pattern>
-					<set-next-rule methodname="add" /> <!-- add routine to set -->
-				</pattern>
-				<set-next-rule methodname="addRoutines"/>
+					<set-next-rule methodname="addRoutine" /> <!-- add routine to set -->
 			</pattern>		
 			<set-next-rule methodname="add" />
 		</pattern>

@@ -48,7 +48,7 @@ public class DefaultFileAutomatedPlayerService implements AutomatedPlayerService
 	@Override
 	public AutomatedPlayer spawnNew(int plyrId) {
 		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("AutomatedPlayerService.spawnNew() not implemented"); 	
 	}
 	
 	/**
@@ -65,6 +65,16 @@ public class DefaultFileAutomatedPlayerService implements AutomatedPlayerService
 				}
 			}
 		}
+	}
+	@Override
+	public Player loadPlayer(String pName) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("AutomatedPlayerService.loadPlayer() not implemented");
+	}
+	@Override
+	public void runCommand(Player p, String s) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("AutomatedPlayerService.runCommand() not implemented");
 	}
 
 }

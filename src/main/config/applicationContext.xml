@@ -41,8 +41,9 @@
 	
 	<bean id="autoPlayerFactory" class="javamud.player.DefaultXmlFileAutomatedPlayerFactory" init-method="init" >
 		<property name="digesterFileName" value="auto-player-digester-rules.xml"/>
-		<property name="playerService" ref="playerService"/>
+		<property name="playerService" ref="autoPlayerService"/>
 		<property name="worldService"  ref="worldService"/>
+		<property name="routineFactory" ref="routineFactory"/>
 	</bean>
 	
 	<bean id="worldService" class="javamud.room.DefaultFileWorldService" init-method="init">

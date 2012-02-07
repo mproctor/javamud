@@ -1,6 +1,6 @@
 package javamud.player;
 
-public interface AutomatedPlayerService {
+public interface AutomatedPlayerService extends PlayerService {
 
 	public AutomatedPlayer spawnNew(int plyrId);
 

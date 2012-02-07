@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javamud.room.Room;
 import javamud.room.WorldService;
+import javamud.routine.RoutineFactory;
 import javamud.util.AbstractXmlFactory;
 
 import org.apache.log4j.Logger;
@@ -16,12 +17,17 @@ import org.xml.sax.SAXException;
 
 public class DefaultXmlFileAutomatedPlayerFactory extends AbstractXmlFactory implements PlayerFactory<AutomatedPlayer> {
 	private WorldService worldService;
+	private RoutineFactory routineFactory;
 
-	private PlayerService playerService;
+	public void setRoutineFactory(RoutineFactory routineFactory) {
+		this.routineFactory = routineFactory;
+	}
+
+	private AutomatedPlayerService playerService;
 	private static final Logger logger = Logger.getLogger(DefaultXmlFileAutomatedPlayerFactory.class);
 	
 	
-	public void setPlayerService(PlayerService playerService) {
+	public void setPlayerService(AutomatedPlayerService playerService) {
 		this.playerService = playerService;
 	}
 
@@ -51,13 +57,12 @@ public class DefaultXmlFileAutomatedPlayerFactory extends AbstractXmlFactory imp
 			
 			return pMap;
 		} catch (SAXException se) {
-			logger.error("Error parsing the player file: "+se.getMessage(),se);
+			logger.error("Error parsing the automated player file: "+se.getMessage(),se);
 		} catch (IOException ie) {
-			logger.error("Error parsing the player file: "+ie.getMessage(),ie);
+			logger.error("Error parsing the automated player file: "+ie.getMessage(),ie);
 		}
 		
-		return null;
-	}
+		throw new RuntimeException("Exception while parsing");	}
 	
 	/**
 	 * caller needs to fill in all the details

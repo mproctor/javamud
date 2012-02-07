@@ -15,7 +15,7 @@
 			<keyword>tiddles</keyword>
 		</keywords>
 		<description>A black and white cat walks around here as if he owns the place. His nametag says "Tiddles".</description>
-		<currentZoneId>100</currentZoneId>
+		<currentZoneId>1</currentZoneId>
 		<currentRoomId>1</currentRoomId>
 		<routines>
 			<routine name="randomMove">
