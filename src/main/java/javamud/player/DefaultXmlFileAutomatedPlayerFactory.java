@@ -53,6 +53,10 @@ public class DefaultXmlFileAutomatedPlayerFactory extends AbstractXmlFactory imp
 					logger.warn("Attempt to load automated player "+sp.getId()+" when zone "+sp.getCurrentZoneId()+" is not loaded");
 				}
 				pMap.put(p.getName(), p);
+				
+				if (p.hasRoutine()) {
+					
+				}
 			}
 			
 			return pMap;

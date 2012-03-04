@@ -31,6 +31,10 @@ public class SimpleAutomatedPlayer extends AbstractPlayer implements AutomatedPl
 		return this.keywords != null && this.keywords.contains(k);
 	}
 
+	@Override
+	public boolean hasRoutine() {
+		return routines.size() > 0;
+	}
 
 	public void addRoutine(Routine routine) {
 		this.routines.add(routine);
