@@ -55,7 +55,7 @@ public class DefaultXmlFileAutomatedPlayerFactory extends AbstractXmlFactory imp
 				pMap.put(p.getName(), p);
 				
 				if (p.hasRoutine()) {
-					
+					// if an auto-player has a routine, register with the server 
 				}
 			}
 			

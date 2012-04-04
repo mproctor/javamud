@@ -1,127 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd ">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd ">
 
 	<bean id="server" class="javamud.server.MudServer">
-		<property name="stateMachine" ref="stateMachine"/>
-		<property name="executorService" ref="executorService"/>
-		<property name="port" value="4000"/>
+		<property name="stateMachine" ref="stateMachine" />
+		<property name="executorService" ref="executorService" />
+		<property name="port" value="4000" />
 	</bean>
-	
-	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newSingleThreadExecutor"/>
-	<bean id="cmdExecutorService" class="java.util.concurrent.Executors" factory-method="newSingleThreadExecutor"/>
-	
-	
+
+	<bean id="executorService" class="java.util.concurrent.Executors"
+		factory-method="newSingleThreadExecutor" />
+	<bean id="scheduledTaskExecutorService" class="java.util.concurrent.Executors"
+		factory-method="newSingleThreadExecutor" />
+	<bean id="playerCommandExecutorService" class="java.util.concurrent.Executors"
+		factory-method="newSingleThreadExecutor" />
+
+
 	<bean id="stateMachine" class="javamud.server.MudStateMachine">
-		<property name="mudServer" ref="server"/>
-		<property name="loginService" ref="playerService"/>
-		<property name="playerMappingService" ref="playerMappingService"/>
+		<property name="mudServer" ref="server" />
+		<property name="loginService" ref="playerService" />
+		<property name="playerMappingService" ref="playerMappingService" />
+	</bean>
+	<bean id="mudEngine" class="javamud.server.MudEngine">
+		<constructor-arg name="startingCapacity" value="50" />
+		<property name="playerCommandExecutor" ref="playerCommandExecutorService" />
+		<property name="scheduledTaskExecutor" ref="scheduledTaskExecutorService" />
 	</bean>
 	<bean id="commandExecutor" class="javamud.command.DefaultCommandExecutor">
-		<property name="executorService" ref="cmdExecutorService"/>
-		<property name="commandParser" ref="commandParser"/>
+		<property name="commandParser" ref="commandParser" />
+		<property name="mudEngine" ref="mudEngine"/>
 	</bean>
-	<bean id="playerService" class="javamud.player.DefaultFileRemotePlayerService" init-method="init">
-		<property name="playerFileName" value="sample-data\player.xml"/>
-		<property name="playerFactory" ref="playerFactory"/>
-		<property name="commandExecutor" ref="commandExecutor"/>
+	<bean id="playerService" class="javamud.player.DefaultFileRemotePlayerService"
+		init-method="init">
+		<property name="playerFileName" value="sample-data\player.xml" />
+		<property name="playerFactory" ref="playerFactory" />
+		<property name="commandExecutor" ref="commandExecutor" />
 	</bean>
-	<bean id="autoPlayerService" class="javamud.player.DefaultFileAutomatedPlayerService" init-method="init" >
-		<property name="playerFileName" value="sample-data\npc.xml"/>
-		<property name="playerFactory" ref="autoPlayerFactory"/>
+	<bean id="autoPlayerService" class="javamud.player.DefaultFileAutomatedPlayerService"
+		init-method="init">
+		<property name="playerFileName" value="sample-data\npc.xml" />
+		<property name="playerFactory" ref="autoPlayerFactory" />
 	</bean>
-	<!--
-	  -  player relies on world to know current room  
-	  -->
-	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory" init-method="init" >
-		<property name="digesterFileName" value="player-digester-rules.xml"/>
-		<property name="playerMappingService" ref="playerMappingService"/>
-		<property name="playerService" ref="playerService"/>
-		<property name="worldService"  ref="worldService"/>
+	<!-- - player relies on world to know current room -->
+	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory"
+		init-method="init">
+		<property name="digesterFileName" value="player-digester-rules.xml" />
+		<property name="playerMappingService" ref="playerMappingService" />
+		<property name="playerService" ref="playerService" />
+		<property name="worldService" ref="worldService" />
 	</bean>
-	
-	<bean id="autoPlayerFactory" class="javamud.player.DefaultXmlFileAutomatedPlayerFactory" init-method="init" >
-		<property name="digesterFileName" value="auto-player-digester-rules.xml"/>
-		<property name="playerService" ref="autoPlayerService"/>
-		<property name="worldService"  ref="worldService"/>
-		<property name="routineFactory" ref="routineFactory"/>
+
+	<bean id="autoPlayerFactory" class="javamud.player.DefaultXmlFileAutomatedPlayerFactory"
+		init-method="init">
+		<property name="digesterFileName" value="auto-player-digester-rules.xml" />
+		<property name="playerService" ref="autoPlayerService" />
+		<property name="worldService" ref="worldService" />
+		<property name="routineFactory" ref="routineFactory" />
 	</bean>
-	
-	<bean id="worldService" class="javamud.room.DefaultFileWorldService" init-method="init">
-		<property name="worldFileName" value="sample-data\world.xml"/>
-		<property name="worldFactory" ref="worldFactory"/>
+
+	<bean id="worldService" class="javamud.room.DefaultFileWorldService"
+		init-method="init">
+		<property name="worldFileName" value="sample-data\world.xml" />
+		<property name="worldFactory" ref="worldFactory" />
 	</bean>
-	<bean id="worldFactory" class="javamud.room.DefaultXmlFileWorldFactory" init-method="init">
-		<property name="digesterFileName" value="world-digester-rules.xml"/>
+	<bean id="worldFactory" class="javamud.room.DefaultXmlFileWorldFactory"
+		init-method="init">
+		<property name="digesterFileName" value="world-digester-rules.xml" />
 	</bean>
 
 	<bean id="playerMappingService" class="javamud.server.PlayerMappingService">
-		<property name="mudServer" ref="server"/>
-		<property name="playerService" ref="playerService"/>
+		<property name="mudServer" ref="server" />
+		<property name="playerService" ref="playerService" />
 	</bean>
-	
+
 	<bean id="routineFactory" class="javamud.routine.RoutineFactory">
 		<property name="routineMap">
 			<map>
-				<entry key="randomMove" value-ref="randomMoveRoutine"/>
+				<entry key="randomMove" value-ref="randomMoveRoutine" />
 			</map>
 		</property>
 	</bean>
 
-	<bean id="commandParser" class="javamud.command.DefaultCommandParser" init-method="init">
-		<property name="t" ref="trie"/>
-		<property name="exact"><list><value>quit</value></list></property>
+	<bean id="commandParser" class="javamud.command.DefaultCommandParser"
+		init-method="init">
+		<property name="t" ref="trie" />
+		<property name="exact">
+			<list>
+				<value>quit</value>
+			</list>
+		</property>
 		<property name="cmdMap">
-			<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="javamud.command.Command">
-			<entry key="say" value-ref="sayCommand"/>
-			<entry key="look" value-ref="lookCommand"/>
-			<entry key="north" value-ref="northCommand"/>
-			<entry key="south" value-ref="southCommand"/>
-			<entry key="east" value-ref="eastCommand"/>
-			<entry key="west" value-ref="westCommand"/>
-			<entry key="up" value-ref="upCommand"/>
-			<entry key="down" value-ref="downCommand"/>
-			<entry key="load" value-ref="loadCommand"/>
-			<entry key="tell" value-ref="tellCommand"/>
-			<entry key="quit" value-ref="exitCommand"/>
+			<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String"
+				value-type="javamud.command.Command">
+				<entry key="say" value-ref="sayCommand" />
+				<entry key="look" value-ref="lookCommand" />
+				<entry key="north" value-ref="northCommand" />
+				<entry key="south" value-ref="southCommand" />
+				<entry key="east" value-ref="eastCommand" />
+				<entry key="west" value-ref="westCommand" />
+				<entry key="up" value-ref="upCommand" />
+				<entry key="down" value-ref="downCommand" />
+				<entry key="load" value-ref="loadCommand" />
+				<entry key="tell" value-ref="tellCommand" />
+				<entry key="quit" value-ref="exitCommand" />
 			</util:map>
 		</property>
 	</bean>
-	
-	<bean id="exitCommand" class="javamud.command.ExitCommand"/>
-	<bean id="sayCommand" class="javamud.command.SayCommand"/>
 
-	<bean id="lookCommand" class="javamud.command.LookCommand"/>
-	
+	<bean id="exitCommand" class="javamud.command.ExitCommand" />
+	<bean id="sayCommand" class="javamud.command.SayCommand" />
+
+	<bean id="lookCommand" class="javamud.command.LookCommand" />
+
 	<bean id="northCommand" class="javamud.command.NorthCommand">
-		<property name="worldService" ref="worldService"/>
+		<property name="worldService" ref="worldService" />
 	</bean>
-	
+
 	<bean id="southCommand" class="javamud.command.SouthCommand">
-		<property name="worldService" ref="worldService"/>
+		<property name="worldService" ref="worldService" />
 	</bean>
-	
+
 	<bean id="eastCommand" class="javamud.command.EastCommand">
-		<property name="worldService" ref="worldService"/>
+		<property name="worldService" ref="worldService" />
 	</bean>
-	
+
 	<bean id="westCommand" class="javamud.command.WestCommand">
-		<property name="worldService" ref="worldService"/>
+		<property name="worldService" ref="worldService" />
 	</bean>
-	
+
 	<bean id="downCommand" class="javamud.command.DownCommand">
-		<property name="worldService" ref="worldService"/>
+		<property name="worldService" ref="worldService" />
 	</bean>
-	
+
 	<bean id="upCommand" class="javamud.command.UpCommand">
-		<property name="worldService" ref="worldService"/>
+		<property name="worldService" ref="worldService" />
 	</bean>
 	<bean id="loadCommand" class="javamud.command.LoadCommand">
-		<property name="worldService" ref="worldService"/>
-		<property name="automatedPlayerService" ref="autoPlayerService"/>
+		<property name="worldService" ref="worldService" />
+		<property name="automatedPlayerService" ref="autoPlayerService" />
 	</bean>
-	<bean id="tellCommand" class="javamud.command.TellCommand"/>
-	
-	<bean id="randomMoveRoutine" class="javamud.routine.RandomMoveRoutine"/>
-	
-	<bean id="trie" class="javamud.data.DefaultTrie"/>
+	<bean id="tellCommand" class="javamud.command.TellCommand" />
+
+	<bean id="randomMoveRoutine" class="javamud.routine.RandomMoveRoutine" />
+
+	<bean id="trie" class="javamud.data.DefaultTrie" />
 </beans>

@@ -4,12 +4,11 @@ import java.nio.channels.SelectionKey;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
-
 import javamud.player.Player;
 import javamud.player.PlayerService;
 import javamud.room.Room;
-import javamud.room.WorldService;
+
+import org.apache.log4j.Logger;
 
 /**
  * maintains the mapping between a player on the mud and their

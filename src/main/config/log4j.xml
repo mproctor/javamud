@@ -8,7 +8,11 @@
 	</layout>
      </appender>
        <root>
-	  <priority value="debug"></priority>
+	  <priority value="info"></priority>
 	  <appender-ref ref="stdout"/>
 	</root>
+	
+	<logger name="javamud">
+	   <level value="debug"/>
+	</logger>
 </log4j:configuration>
