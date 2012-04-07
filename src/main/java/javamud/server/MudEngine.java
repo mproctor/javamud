@@ -2,22 +2,24 @@ package javamud.server;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executor;
 
 import javamud.command.Command;
 import javamud.player.Player;
 
 import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
+//import org.quartz.JobBuilder;
+//import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
+//import org.quartz.SimpleScheduleBuilder;
+//import org.quartz.Trigger;
+//import org.quartz.TriggerBuilder;
+//import org.quartz.impl.StdSchedulerFactory;
 import org.apache.log4j.Logger;
 
 /**
@@ -33,9 +35,9 @@ public class MudEngine {
 	private Scheduler coreScheduler;
 
 	private Queue<MudJob> mudTasks;
-	
-	private Executor scheduledTaskExecutor;		// mud heartbeat
-	private Executor playerCommandExecutor;		// player initiated commands
+
+	private Executor scheduledTaskExecutor; // mud heartbeat
+	private Executor playerCommandExecutor; // player initiated commands
 
 	public void setPlayerCommandExecutor(Executor playerCommandExecutor) {
 		this.playerCommandExecutor = playerCommandExecutor;
@@ -45,39 +47,53 @@ public class MudEngine {
 		this.scheduledTaskExecutor = taskExecutor;
 	}
 
-	private Trigger hbTrigger;
+//	private Trigger hbTrigger;
 
 	public MudEngine(int startingCapacity) {
-		try {
-			mudTasks = new PriorityQueue<MudJob>(startingCapacity,
-					MudJob.getComparator());
-			coreScheduler = StdSchedulerFactory.getDefaultScheduler();
 
-			hbTrigger = TriggerBuilder
-					.newTrigger()
-					.withIdentity("hbTrig", "core")
-					.withSchedule(
-							SimpleScheduleBuilder.simpleSchedule()
-									.repeatForever()
-									.withIntervalInMilliseconds(1000L)).build();
+		mudTasks = new PriorityQueue<MudJob>(startingCapacity,
+				MudJob.getComparator());
+		startTimerHeartbeat();
 
-			JobDetail dequeueJob = JobBuilder.newJob()
-					.withIdentity("dequeue", "core")
-					.ofType(MudEngineDequeJob.class).build();
-
-			coreScheduler.scheduleJob(dequeueJob, hbTrigger);
-			
-			logger.info("Starting the core scheduled executor");
-			coreScheduler.start();
-		} catch (SchedulerException e) {
-			logger.warn(
-					"Exception while starting up main engine loop: "
-							+ e.getMessage(), e);
-
-			// without the loop we may as well die
-			throw new RuntimeException(e);
-		}
 	}
+
+	private Timer coreTimer;
+
+	private void startTimerHeartbeat() {
+		coreTimer = new Timer();
+		
+		logger.info("Starting the core timer");
+		coreTimer.scheduleAtFixedRate(new MudEngineDequeJob(), 0, 1000L);
+	}
+
+//	private void startHeartbeat() {
+//		try {
+//			coreScheduler = StdSchedulerFactory.getDefaultScheduler();
+//			logger.info("Starting the core scheduled executor");
+//			coreScheduler.start();
+//
+//			JobDetail dequeueJob = JobBuilder.newJob(MudEngineDequeJob.class)
+//					.withIdentity("dequeue", "core").build();
+//
+//			hbTrigger = TriggerBuilder
+//					.newTrigger()
+//					.startNow()
+//					.withIdentity("hbTrig", "core")
+//					.forJob(dequeueJob)
+//					.withSchedule(
+//							SimpleScheduleBuilder.simpleSchedule()
+//									.repeatForever()
+//									.withIntervalInMilliseconds(1000L)).build();
+//
+//		} catch (SchedulerException e) {
+//			logger.warn(
+//					"Exception while starting up main engine loop: "
+//							+ e.getMessage(), e);
+//
+//			// without the loop we may as well die
+//			throw new RuntimeException(e);
+//		}
+//	}
 
 	/**
 	 * need to shutdown the quartz scheduler to allow jvm to stop
@@ -92,7 +108,7 @@ public class MudEngine {
 		}
 	}
 
-	private class MudEngineDequeJob implements Job {
+	private class MudEngineDequeJob extends TimerTask implements Job {
 		@Override
 		public void execute(JobExecutionContext arg0)
 				throws JobExecutionException {
@@ -104,20 +120,36 @@ public class MudEngine {
 
 			if (mudJob != null) {
 				logger.debug("Running job " + mudJob);
-				
+
+				scheduledTaskExecutor.execute(mudJob);
+			}
+
+		}
+
+		@Override
+		public void run() {
+			logger.debug("running task-dequeue");
+			MudJob mudJob = null;
+
+			mudJob = mudTasks.poll();
+
+			if (mudJob != null) {
+				logger.debug("Running job " + mudJob);
+
 				scheduledTaskExecutor.execute(mudJob);
 			}
 		}
 	}
 
-	public void submitPlayerCommand(final Player p, final Command c, final String cmdArgs) {
+	public void submitPlayerCommand(final Player p, final Command c,
+			final String cmdArgs) {
 		playerCommandExecutor.execute(new Runnable() {
-			
-			//TODO: this only allows a command to return a single string
-			
+
+			// TODO: this only allows a command to return a single string
+
 			@Override
 			public void run() {
-				c.execute(p, cmdArgs);					
+				c.execute(p, cmdArgs);
 			}
 		});
 
