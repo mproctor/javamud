@@ -16,6 +16,9 @@
 	<bean id="playerCommandExecutorService" class="java.util.concurrent.Executors"
 		factory-method="newSingleThreadExecutor" />
 
+    <bean id="calendar" class="javamud.calendar.MudCalendar">
+        <property name="mudEngine" ref="mudEngine"/>
+    </bean>
 
 	<bean id="stateMachine" class="javamud.server.MudStateMachine">
 		<property name="mudServer" ref="server" />

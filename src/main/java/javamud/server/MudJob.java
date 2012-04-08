@@ -17,9 +17,14 @@ public abstract class MudJob implements Runnable {
 		return jobComparator;
 	}
 	
-	private MudTime runTime;
+	protected MudTime runTime;
+	protected boolean repeated;
 	
 	public MudTime getRunTime() {
 		return runTime;
+	}
+	
+	public boolean isRepeated() {
+		return repeated;
 	}
 }

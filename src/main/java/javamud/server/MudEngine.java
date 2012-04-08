@@ -6,21 +6,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
 
+import javamud.calendar.MudCalendar;
 import javamud.command.Command;
 import javamud.player.Player;
+import javamud.server.MudTime.Unit;
 
+import org.apache.log4j.Logger;
 import org.quartz.Job;
-//import org.quartz.JobBuilder;
-//import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-//import org.quartz.SimpleScheduleBuilder;
-//import org.quartz.Trigger;
-//import org.quartz.TriggerBuilder;
-//import org.quartz.impl.StdSchedulerFactory;
-import org.apache.log4j.Logger;
 
 /**
  * The main engine - driven by a timer that we schedule events on to
@@ -34,7 +30,10 @@ public class MudEngine {
 
 	private Scheduler coreScheduler;
 
-	private Queue<MudJob> mudTasks;
+	private Queue<MudJob> mudTickTasks;
+	
+	private Queue<MudJob> mudHourTasks;
+
 
 	private Executor scheduledTaskExecutor; // mud heartbeat
 	private Executor playerCommandExecutor; // player initiated commands
@@ -51,8 +50,9 @@ public class MudEngine {
 
 	public MudEngine(int startingCapacity) {
 
-		mudTasks = new PriorityQueue<MudJob>(startingCapacity,
-				MudJob.getComparator());
+		mudTickTasks = new PriorityQueue<MudJob>(startingCapacity,MudJob.getComparator());
+		mudHourTasks = new PriorityQueue<MudJob>(startingCapacity,MudJob.getComparator());
+		
 		startTimerHeartbeat();
 
 	}
@@ -63,7 +63,7 @@ public class MudEngine {
 		coreTimer = new Timer();
 		
 		logger.info("Starting the core timer");
-		coreTimer.scheduleAtFixedRate(new MudEngineDequeJob(), 0, 1000L);
+		coreTimer.scheduleAtFixedRate(new MudEngineDequeJob(), 0, MudCalendar.MS_PER_MUD_TICK);
 	}
 
 //	private void startHeartbeat() {
@@ -109,6 +109,8 @@ public class MudEngine {
 	}
 
 	private class MudEngineDequeJob extends TimerTask implements Job {
+		
+		private int countdown =  MudCalendar.TICKS_PER_HOUR;
 		@Override
 		public void execute(JobExecutionContext arg0)
 				throws JobExecutionException {
@@ -116,7 +118,7 @@ public class MudEngine {
 			logger.debug("running mudjob-dequeue");
 			MudJob mudJob = null;
 
-			mudJob = mudTasks.poll();
+			mudJob = mudTickTasks.poll();
 
 			if (mudJob != null) {
 				logger.debug("Running job " + mudJob);
@@ -126,18 +128,52 @@ public class MudEngine {
 
 		}
 
+		// TODO: reschedule needs to be fixed
 		@Override
 		public void run() {
-			logger.debug("running task-dequeue");
 			MudJob mudJob = null;
+			
+			int tNum=mudTickTasks.size();
+			logger.debug("Processing "+tNum+" tasks");
 
-			mudJob = mudTasks.poll();
+			while(tNum-- > 0) {
 
-			if (mudJob != null) {
-				logger.debug("Running job " + mudJob);
-
-				scheduledTaskExecutor.execute(mudJob);
+				mudJob = mudTickTasks.poll();
+	
+				if (mudJob != null) {
+					logger.debug("Running job " + mudJob);
+	
+					scheduledTaskExecutor.execute(mudJob);
+					
+					if (mudJob.isRepeated()) {
+						submitScheduledTask(mudJob);
+					}
+				}
 			}
+			
+			countdown--;
+			
+			if (countdown == 0) {
+				countdown = MudCalendar.TICKS_PER_HOUR;
+				tNum = mudHourTasks.size();
+				logger.debug("Processing "+tNum+" hourly tasks");
+				while (tNum-- > 0) {
+					mudJob = mudHourTasks.poll();
+					if (mudJob != null) {
+						logger.debug("Running hourly job "+mudJob);
+						scheduledTaskExecutor.execute(mudJob);
+						
+					}
+				}				
+			}
+		}
+	}
+	
+	public void submitScheduledTask(MudJob job) {
+		if (job.getRunTime() != null && job.getRunTime().getUnit() == Unit.Hours) {
+			mudHourTasks.offer(job);
+		} else {
+			mudTickTasks.offer(job);
 		}
 	}
 

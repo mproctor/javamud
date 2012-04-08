@@ -2,6 +2,8 @@ package javamud.server;
 
 import java.util.Comparator;
 
+import javamud.calendar.MudCalendar;
+
 /**
  * Mud time units - ticks are the internal measure, hours are the minimum external
  * measure (calendars will combine hours into days/months/years)
@@ -10,8 +12,6 @@ import java.util.Comparator;
  */
 public class MudTime implements Comparable<MudTime>{
 	
-	private static final int TICKS_PER_HOUR = 60; 
-
 	public enum Unit {Ticks,Hours};
 	
 	private final Unit unit;
@@ -27,9 +27,9 @@ public class MudTime implements Comparable<MudTime>{
 				} else if (first.unit == second.unit) {
 					return new Integer(first.qty).compareTo(new Integer(second.getQty()));
 				} else if (first.unit == Unit.Ticks && second.unit == Unit.Hours) {
-					return new Integer(first.qty*TICKS_PER_HOUR).compareTo(new Integer(second.getQty()));
+					return new Integer(first.qty*MudCalendar.TICKS_PER_HOUR).compareTo(new Integer(second.getQty()));
 				} else {
-					return new Integer(first.qty).compareTo(new Integer(second.getQty()*TICKS_PER_HOUR));
+					return new Integer(first.qty).compareTo(new Integer(second.getQty()*MudCalendar.TICKS_PER_HOUR));
 				}	
 			}			
 		};
@@ -70,9 +70,9 @@ public class MudTime implements Comparable<MudTime>{
 		} else if (unit == other.unit) {
 			return new Integer(qty).compareTo(new Integer(other.getQty()));
 		} else if (unit == Unit.Ticks && other.unit == Unit.Hours) {
-			return new Integer(qty*TICKS_PER_HOUR).compareTo(new Integer(other.getQty()));
+			return new Integer(qty*MudCalendar.TICKS_PER_HOUR).compareTo(new Integer(other.getQty()));
 		} else {
-			return new Integer(qty).compareTo(new Integer(other.getQty()*TICKS_PER_HOUR));
+			return new Integer(qty).compareTo(new Integer(other.getQty()*MudCalendar.TICKS_PER_HOUR));
 		}
 	}
 }
