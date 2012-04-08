@@ -17,6 +17,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * The main engine - driven by a timer that we schedule events on to
@@ -24,7 +25,7 @@ import org.quartz.SchedulerException;
  * @author Matt
  * 
  */
-public class MudEngine {
+public class MudEngine implements InitializingBean {
 
 	private static final Logger logger = Logger.getLogger(MudEngine.class);
 
@@ -33,7 +34,12 @@ public class MudEngine {
 	private Queue<MudJob> mudTickTasks;
 	
 	private Queue<MudJob> mudHourTasks;
-
+	
+	private MudCalendar mudCalendar;
+	
+	public void setMudCalendar(MudCalendar mudCalendar) {
+		this.mudCalendar = mudCalendar;
+	}
 
 	private Executor scheduledTaskExecutor; // mud heartbeat
 	private Executor playerCommandExecutor; // player initiated commands
@@ -134,7 +140,10 @@ public class MudEngine {
 			MudJob mudJob = null;
 			
 			int tNum=mudTickTasks.size();
-			logger.debug("Processing "+tNum+" tasks");
+			
+			if (tNum>0) {
+				logger.debug("Processing "+tNum+" tasks");
+			}
 
 			while(tNum-- > 0) {
 
@@ -156,7 +165,9 @@ public class MudEngine {
 			if (countdown == 0) {
 				countdown = MudCalendar.TICKS_PER_HOUR;
 				tNum = mudHourTasks.size();
-				logger.debug("Processing "+tNum+" hourly tasks");
+				if (tNum > 0) {
+					logger.debug("Processing "+tNum+" hourly tasks");
+				}
 				while (tNum-- > 0) {
 					mudJob = mudHourTasks.poll();
 					if (mudJob != null) {
@@ -191,5 +202,10 @@ public class MudEngine {
 			}
 		});
 
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		submitScheduledTask(mudCalendar.getCalendarJob());
 	}
 }

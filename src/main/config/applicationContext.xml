@@ -16,9 +16,7 @@
 	<bean id="playerCommandExecutorService" class="java.util.concurrent.Executors"
 		factory-method="newSingleThreadExecutor" />
 
-    <bean id="calendar" class="javamud.calendar.MudCalendar">
-        <property name="mudEngine" ref="mudEngine"/>
-    </bean>
+    <bean id="calendar" class="javamud.calendar.MudCalendar"/>
 
 	<bean id="stateMachine" class="javamud.server.MudStateMachine">
 		<property name="mudServer" ref="server" />
@@ -29,6 +27,7 @@
 		<constructor-arg name="startingCapacity" value="50" />
 		<property name="playerCommandExecutor" ref="playerCommandExecutorService" />
 		<property name="scheduledTaskExecutor" ref="scheduledTaskExecutorService" />
+		<property name="mudCalendar" ref="calendar"/>
 	</bean>
 	<bean id="commandExecutor" class="javamud.command.DefaultCommandExecutor">
 		<property name="commandParser" ref="commandParser" />

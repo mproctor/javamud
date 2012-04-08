@@ -8,7 +8,7 @@ import javamud.server.MudJob;
 import javamud.server.MudTime;
 import javamud.server.MudTime.Unit;
 
-public class MudCalendar implements InitializingBean {
+public class MudCalendar {
 	
 	private static final Logger logger = Logger.getLogger(MudCalendar.class);
 	
@@ -63,6 +63,10 @@ public class MudCalendar implements InitializingBean {
 	public String getMonthName() {
 		return STATIC_PART + MONTHS[month];
 	}
+	
+	public MudJob getCalendarJob() {
+		return new CalendarJob();
+	}
 
 	class CalendarJob extends MudJob {
 		
@@ -76,12 +80,5 @@ public class MudCalendar implements InitializingBean {
 			nextHour();
 		}
 		
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		// add the basic calendar behaviour
-		
-		mudEngine.submitScheduledTask(new CalendarJob());
 	}
 }
