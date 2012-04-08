@@ -162,7 +162,9 @@ public class MudEngine {
 					if (mudJob != null) {
 						logger.debug("Running hourly job "+mudJob);
 						scheduledTaskExecutor.execute(mudJob);
-						
+						if (mudJob.isRepeated()) {
+							submitScheduledTask(mudJob);
+						}
 					}
 				}				
 			}
