@@ -16,7 +16,7 @@
 	<bean id="playerCommandExecutorService" class="java.util.concurrent.Executors"
 		factory-method="newSingleThreadExecutor" />
 
-    <bean id="calendar" class="javamud.calendar.MudCalendar"/>
+	<bean id="calendar" class="javamud.calendar.MudCalendar" />
 
 	<bean id="stateMachine" class="javamud.server.MudStateMachine">
 		<property name="mudServer" ref="server" />
@@ -27,38 +27,38 @@
 		<constructor-arg name="startingCapacity" value="50" />
 		<property name="playerCommandExecutor" ref="playerCommandExecutorService" />
 		<property name="scheduledTaskExecutor" ref="scheduledTaskExecutorService" />
-		<property name="mudCalendar" ref="calendar"/>
+		<property name="mudCalendar" ref="calendar" />
 	</bean>
 	<bean id="commandExecutor" class="javamud.command.DefaultCommandExecutor">
 		<property name="commandParser" ref="commandParser" />
-		<property name="mudEngine" ref="mudEngine"/>
+		<property name="mudEngine" ref="mudEngine" />
 	</bean>
 	<bean id="playerService" class="javamud.player.DefaultFileRemotePlayerService"
 		init-method="init">
 		<property name="playerFileName" value="sample-data\player.xml" />
 		<property name="playerFactory" ref="playerFactory" />
 		<property name="commandExecutor" ref="commandExecutor" />
+		<property name="playerMappingService" ref="playerMappingService" />
+		<property name="worldService" ref="worldService" />
 	</bean>
 	<bean id="autoPlayerService" class="javamud.player.DefaultFileAutomatedPlayerService"
-		init-method="init">
+		depends-on="routineService" init-method="init">
 		<property name="playerFileName" value="sample-data\npc.xml" />
 		<property name="playerFactory" ref="autoPlayerFactory" />
+		<property name="routineService" ref="routineService" />
+		<property name="worldService" ref="worldService" />
+		<property name="commandExecutor" ref="commandExecutor" />
+		<property name="mudEngine" ref="mudEngine" />
 	</bean>
 	<!-- - player relies on world to know current room -->
 	<bean id="playerFactory" class="javamud.player.DefaultXmlFilePlayerFactory"
 		init-method="init">
 		<property name="digesterFileName" value="player-digester-rules.xml" />
-		<property name="playerMappingService" ref="playerMappingService" />
-		<property name="playerService" ref="playerService" />
-		<property name="worldService" ref="worldService" />
 	</bean>
 
 	<bean id="autoPlayerFactory" class="javamud.player.DefaultXmlFileAutomatedPlayerFactory"
 		init-method="init">
 		<property name="digesterFileName" value="auto-player-digester-rules.xml" />
-		<property name="playerService" ref="autoPlayerService" />
-		<property name="worldService" ref="worldService" />
-		<property name="routineFactory" ref="routineFactory" />
 	</bean>
 
 	<bean id="worldService" class="javamud.room.DefaultFileWorldService"
@@ -76,12 +76,16 @@
 		<property name="playerService" ref="playerService" />
 	</bean>
 
-	<bean id="routineFactory" class="javamud.routine.RoutineFactory">
-		<property name="routineMap">
-			<map>
-				<entry key="randomMove" value-ref="randomMoveRoutine" />
-			</map>
-		</property>
+	<bean id="routineService" class="javamud.routine.DefaultFileRoutineService"
+		init-method="init">
+		<property name="routineFactory" ref="routineFactory" />
+		<property name="routineFileName" value="sample-data\routine.xml" />
+	</bean>
+
+	<bean id="routineFactory" class="javamud.routine.RoutineFactory"
+		init-method="init">
+		<property name="digesterFileName" value="routine-digester-rules.xml" />
+
 	</bean>
 
 	<bean id="commandParser" class="javamud.command.DefaultCommandParser"
@@ -143,8 +147,6 @@
 		<property name="automatedPlayerService" ref="autoPlayerService" />
 	</bean>
 	<bean id="tellCommand" class="javamud.command.TellCommand" />
-
-	<bean id="randomMoveRoutine" class="javamud.routine.RandomMoveRoutine" />
 
 	<bean id="trie" class="javamud.data.DefaultTrie" />
 </beans>

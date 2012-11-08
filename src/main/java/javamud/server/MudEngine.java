@@ -8,7 +8,9 @@ import java.util.concurrent.Executor;
 
 import javamud.calendar.MudCalendar;
 import javamud.command.Command;
+import javamud.player.AutomatedPlayer;
 import javamud.player.Player;
+import javamud.routine.Routine;
 import javamud.server.MudTime.Unit;
 
 import org.apache.log4j.Logger;
@@ -32,11 +34,11 @@ public class MudEngine implements InitializingBean {
 	private Scheduler coreScheduler;
 
 	private Queue<MudJob> mudTickTasks;
-	
+
 	private Queue<MudJob> mudHourTasks;
-	
+
 	private MudCalendar mudCalendar;
-	
+
 	public void setMudCalendar(MudCalendar mudCalendar) {
 		this.mudCalendar = mudCalendar;
 	}
@@ -52,13 +54,15 @@ public class MudEngine implements InitializingBean {
 		this.scheduledTaskExecutor = taskExecutor;
 	}
 
-//	private Trigger hbTrigger;
+	// private Trigger hbTrigger;
 
 	public MudEngine(int startingCapacity) {
 
-		mudTickTasks = new PriorityQueue<MudJob>(startingCapacity,MudJob.getComparator());
-		mudHourTasks = new PriorityQueue<MudJob>(startingCapacity,MudJob.getComparator());
-		
+		mudTickTasks = new PriorityQueue<MudJob>(startingCapacity,
+				MudJob.getComparator());
+		mudHourTasks = new PriorityQueue<MudJob>(startingCapacity,
+				MudJob.getComparator());
+
 		startTimerHeartbeat();
 
 	}
@@ -67,39 +71,40 @@ public class MudEngine implements InitializingBean {
 
 	private void startTimerHeartbeat() {
 		coreTimer = new Timer();
-		
+
 		logger.info("Starting the core timer");
-		coreTimer.scheduleAtFixedRate(new MudEngineDequeJob(), 0, MudCalendar.MS_PER_MUD_TICK);
+		coreTimer.scheduleAtFixedRate(new MudEngineDequeJob(), 0,
+				MudCalendar.MS_PER_MUD_TICK);
 	}
 
-//	private void startHeartbeat() {
-//		try {
-//			coreScheduler = StdSchedulerFactory.getDefaultScheduler();
-//			logger.info("Starting the core scheduled executor");
-//			coreScheduler.start();
-//
-//			JobDetail dequeueJob = JobBuilder.newJob(MudEngineDequeJob.class)
-//					.withIdentity("dequeue", "core").build();
-//
-//			hbTrigger = TriggerBuilder
-//					.newTrigger()
-//					.startNow()
-//					.withIdentity("hbTrig", "core")
-//					.forJob(dequeueJob)
-//					.withSchedule(
-//							SimpleScheduleBuilder.simpleSchedule()
-//									.repeatForever()
-//									.withIntervalInMilliseconds(1000L)).build();
-//
-//		} catch (SchedulerException e) {
-//			logger.warn(
-//					"Exception while starting up main engine loop: "
-//							+ e.getMessage(), e);
-//
-//			// without the loop we may as well die
-//			throw new RuntimeException(e);
-//		}
-//	}
+	// private void startHeartbeat() {
+	// try {
+	// coreScheduler = StdSchedulerFactory.getDefaultScheduler();
+	// logger.info("Starting the core scheduled executor");
+	// coreScheduler.start();
+	//
+	// JobDetail dequeueJob = JobBuilder.newJob(MudEngineDequeJob.class)
+	// .withIdentity("dequeue", "core").build();
+	//
+	// hbTrigger = TriggerBuilder
+	// .newTrigger()
+	// .startNow()
+	// .withIdentity("hbTrig", "core")
+	// .forJob(dequeueJob)
+	// .withSchedule(
+	// SimpleScheduleBuilder.simpleSchedule()
+	// .repeatForever()
+	// .withIntervalInMilliseconds(1000L)).build();
+	//
+	// } catch (SchedulerException e) {
+	// logger.warn(
+	// "Exception while starting up main engine loop: "
+	// + e.getMessage(), e);
+	//
+	// // without the loop we may as well die
+	// throw new RuntimeException(e);
+	// }
+	// }
 
 	/**
 	 * need to shutdown the quartz scheduler to allow jvm to stop
@@ -115,8 +120,9 @@ public class MudEngine implements InitializingBean {
 	}
 
 	private class MudEngineDequeJob extends TimerTask implements Job {
-		
-		private int countdown =  MudCalendar.TICKS_PER_HOUR;
+
+		private int countdown = MudCalendar.TICKS_PER_HOUR;
+
 		@Override
 		public void execute(JobExecutionContext arg0)
 				throws JobExecutionException {
@@ -138,52 +144,53 @@ public class MudEngine implements InitializingBean {
 		@Override
 		public void run() {
 			MudJob mudJob = null;
-			
-			int tNum=mudTickTasks.size();
-			
-			if (tNum>0) {
-				logger.debug("Processing "+tNum+" tasks");
+
+			int tNum = mudTickTasks.size();
+
+			if (tNum > 0) {
+				logger.debug("Processing " + tNum + " tasks");
 			}
 
-			while(tNum-- > 0) {
+			while (tNum-- > 0) {
 
 				mudJob = mudTickTasks.poll();
-	
+
 				if (mudJob != null) {
 					logger.debug("Running job " + mudJob);
-	
+
 					scheduledTaskExecutor.execute(mudJob);
-					
+
 					if (mudJob.isRepeated()) {
 						submitScheduledTask(mudJob);
 					}
 				}
 			}
-			
+
 			countdown--;
-			
+
 			if (countdown == 0) {
 				countdown = MudCalendar.TICKS_PER_HOUR;
 				tNum = mudHourTasks.size();
 				if (tNum > 0) {
-					logger.debug("Processing "+tNum+" hourly tasks");
+					logger.debug("Processing " + tNum + " hourly tasks");
 				}
 				while (tNum-- > 0) {
 					mudJob = mudHourTasks.poll();
 					if (mudJob != null) {
-						logger.debug("Running hourly job "+mudJob);
+						logger.debug("Running hourly job " + mudJob);
 						scheduledTaskExecutor.execute(mudJob);
 						if (mudJob.isRepeated()) {
 							submitScheduledTask(mudJob);
 						}
 					}
-				}				
+				}
 			}
 		}
 	}
-	
+
 	public void submitScheduledTask(MudJob job) {
-		if (job.getRunTime() != null && job.getRunTime().getUnit() == Unit.Hours) {
+		if (job.getRunTime() != null
+				&& job.getRunTime().getUnit() == Unit.Hours) {
 			mudHourTasks.offer(job);
 		} else {
 			mudTickTasks.offer(job);
@@ -207,5 +214,49 @@ public class MudEngine implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		submitScheduledTask(mudCalendar.getCalendarJob());
+	}
+
+	/**
+	 * We are registering a routine on behalf of an "automated player" to be
+	 * called on a regular cycle
+	 * 
+	 * This requires rewrapping as a scheduled {@link MudJob} and submitting to
+	 * the scheduler
+	 * 
+	 * @param autoPlayer
+	 * @param routine
+	 */
+	public void registerRoutine(final AutomatedPlayer autoPlayer,
+			final Routine routine) {
+		// TODO: for now we ignore routines that have no next tick... but we
+		// should add them somewhere so we can verify things haven't changed
+		if (routine.hasNext()) {
+			logger.debug("Adding routine " + routine.getName() + " to player "
+					+ autoPlayer.getName());
+
+			// TODO: initially we don't ever check if a job becomes UNscheduled
+			// (i.e. hasNext() becomes false) which could happen e.g. if the
+			// player that runs this command dies
+			//
+			submitScheduledTask(new MudJob() {
+
+				@Override
+				public MudTime getRunTime() {
+					return routine.timeToNext();
+				}
+
+				@Override
+				public boolean isRepeated() {
+					return routine.hasNext();
+				}
+
+				@Override
+				public void run() {
+					routine.execute(autoPlayer);
+				}
+
+			});
+
+		}
 	}
 }

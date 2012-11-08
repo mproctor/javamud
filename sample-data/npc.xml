@@ -18,11 +18,7 @@
 		<currentZoneId>1</currentZoneId>
 		<currentRoomId>1</currentRoomId>
 		<routines>
-			<routine name="randomMove">
-				<params>
-					<param name="type" value="withinZone"/>
-				</params>
-			</routine>
+			<routine>randomMove</routine>
 		</routines>
 	</player>
 </players>

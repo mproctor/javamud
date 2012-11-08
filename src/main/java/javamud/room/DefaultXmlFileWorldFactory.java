@@ -2,6 +2,7 @@ package javamud.room;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,21 +27,21 @@ public class DefaultXmlFileWorldFactory extends AbstractXmlFactory implements
 			Map<Integer, Zone> zMap = new HashMap<Integer, Zone>();
 			for (Zone zone : zones) {
 				zMap.put(zone.getId(), zone);
-				
-				List<Room> rooms = ((SimpleZone)zone).getRooms();
-				Map<Integer,Room> rMap = new HashMap<Integer,Room>();
-				for(Room room: rooms) {
+
+				List<Room> rooms = ((SimpleZone) zone).getRooms();
+				Map<Integer, Room> rMap = new HashMap<Integer, Room>();
+				for (Room room : rooms) {
 					rMap.put(room.getId(), room);
-					((SimpleRoom)room).setZone(zone);
+					((SimpleRoom) room).setZone(zone);
 				}
-				
-				((SimpleZone)zone).setRMap(rMap);
-				
+
+				((SimpleZone) zone).setRMap(rMap);
+
 			}
 
 			linkExits(zones, zMap);
 
-			return zMap;
+			return Collections.unmodifiableMap(zMap);
 		} catch (SAXException se) {
 			logger.error("Error parsing the world file: " + se.getMessage(), se);
 		} catch (IOException ie) {
@@ -63,9 +64,10 @@ public class DefaultXmlFileWorldFactory extends AbstractXmlFactory implements
 			for (Room r : ((SimpleZone) zone).getRooms()) {
 				for (Exit e : r.getExits()) {
 					SimpleExit se = (SimpleExit) e;
-					
+
 					// if zoneid is not set, its the current zone
-					Zone z = se.getToZoneId()==Zone.ZONEID_NULL?zone:zIdMap.get(se.getToZoneId());
+					Zone z = se.getToZoneId() == Zone.ZONEID_NULL ? zone
+							: zIdMap.get(se.getToZoneId());
 					se.setDestination(z.lookupRoom(se.getToRoomId()));
 				}
 			}

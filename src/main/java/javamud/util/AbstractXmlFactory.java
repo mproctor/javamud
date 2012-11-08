@@ -11,19 +11,24 @@ public abstract class AbstractXmlFactory {
 	private String digesterFileName;
 	protected Digester digester;
 
-	private static final Logger logger = Logger.getLogger(AbstractXmlFactory.class);
+	private static final Logger logger = Logger
+			.getLogger(AbstractXmlFactory.class);
 
 	public void setDigesterFileName(String digesterFileName) {
 		this.digesterFileName = digesterFileName;
 	}
-	
+
 	public void init() {
 		ClassPathResource cpr = new ClassPathResource(digesterFileName);
 		try {
 			digester = DigesterLoader.createDigester(cpr.getURL());
 		} catch (IOException e) {
-			logger.error("Problem getting digester: "+e.getMessage(),e);
+			logger.error("Problem getting digester: " + e.getMessage(), e);
 		}
+	}
+
+	public Digester getDigester() {
+		return digester;
 	}
 
 }
